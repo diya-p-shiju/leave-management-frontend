@@ -1,61 +1,52 @@
-import React from 'react'
-import newRequest from '@/utils/newRequest'
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
-  import { User } from '@/types/types'
-  import { useState, useEffect } from 'react'
-  
+import React, { useState, useEffect } from 'react';
+import newRequest from '@/utils/newRequest';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { User } from '@/types/types';
+
 interface GetUserProps {
-    onSelectUser : (userId:string) => void;
+    onSelectUser: (userId: string) => void;
 }
 
+const GetUsers: React.FC<GetUserProps> = ({ onSelectUser }) => {
+    const [users, setUsers] = useState<User[]>([]);
+    const [selectedUserId, setSelectedUserId] = useState<string | undefined>(undefined);
 
-const GetUsers : React.FC<GetUserProps> = ({onSelectUser}) => {
-    const [users,setUsers] = useState<User>([]);
-    const [selectedUser, setSelectedUser] = useState<User>();
-
-
-    useEffect(()=>{
-        const fetchUsers = async () =>{
+    useEffect(() => {
+        const fetchUsers = async () => {
             try {
-                const response = axios.get("/users/");
+                const response = await newRequest.get("/users/");
                 console.log(response);
                 setUsers(response.data);
-                
             } catch (error) {
-                console.log("error while fetching users",error);
+                console.log("error while fetching users", error);
             }
-        }
-    },[])
+        };
+        fetchUsers();
+    }, []);
 
-  return (
-    <div>
-    <Select>
-        <SelectTrigger >
-            <SelectValue placeholder="Select a staff" />
-        </SelectTrigger>
-        <SelectContent>
-            <SelectGroup>
-                {
-                    users.map((user)=>{
-                        <SelectItem key={user._id} value={user._id}>
-                            {user.name}
-                        </SelectItem>
-                    })
-                }
-            </SelectGroup>
-        </SelectContent>
-    </Select>
-      
-    </div>
-  )
-}
+    const handleSelect = (userId: string) => {
+        setSelectedUserId(userId);
+        onSelectUser(userId); // Calling the parent callback with selected user ID
+    };
 
-export default GetUsers
+    return (
+        <div>
+            <Select value={selectedUserId} onValueChange={handleSelect}>
+                <SelectTrigger className="w-[280px]">
+                    <SelectValue placeholder="Select a staff" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectGroup>
+                        {users.map((user) => (
+                            <SelectItem key={user._id} value={user._id}>
+                                {user.name}
+                            </SelectItem>
+                        ))}
+                    </SelectGroup>
+                </SelectContent>
+            </Select>
+        </div>
+    );
+};
+
+export default GetUsers;
