@@ -18,16 +18,19 @@ interface GetUserProps {
 
 
 const GetUsers : React.FC<GetUserProps> = ({onSelectUser}) => {
-    const [user,setUser] = useState<User>([]);
+    const [users,setUsers] = useState<User>([]);
     const [selectedUser, setSelectedUser] = useState<User>();
 
 
     useEffect(()=>{
         const fetchUsers = async () =>{
             try {
+                const response = axios.get("/users/");
+                console.log(response);
+                setUsers(response.data);
                 
             } catch (error) {
-                
+                console.log("error while fetching users",error);
             }
         }
     },[])
@@ -40,7 +43,13 @@ const GetUsers : React.FC<GetUserProps> = ({onSelectUser}) => {
         </SelectTrigger>
         <SelectContent>
             <SelectGroup>
-                <SelectItem value={''} ></SelectItem>
+                {
+                    users.map((user)=>{
+                        <SelectItem key={user._id} value={user._id}>
+                            {user.name}
+                        </SelectItem>
+                    })
+                }
             </SelectGroup>
         </SelectContent>
     </Select>
