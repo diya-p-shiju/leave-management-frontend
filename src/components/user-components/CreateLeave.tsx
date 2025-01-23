@@ -9,7 +9,6 @@ import { Leave } from "@/types/types";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -104,28 +103,31 @@ const CreateLeave = () => {
   };
 
   return (
-    <div className="flex items-center overflow-hidden h-screen w-screen justify-center">
-      <div className="w-96 h-96">
-        <Card>
-          <CardHeader>
-            <CardTitle>Leave form</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit}>
-              {/* Reason */}
-              <div className="grid items-center max-w-sm gap-2">
-                <Label htmlFor="reason" className="font-medium">
-                  Reason for Leave
-                </Label>
-                <Textarea
-                  placeholder="Type your reason here"
-                  name="reason"
-                  value={state.reason}
-                  onChange={handleChange}
-                />
-              </div>
+    <div className="w-screen h-screen flex items-center justify-center bg-gray-100 p-10">
+      <Card className="w-full max-w-4xl bg-white shadow-lg rounded-lg">
+        <CardHeader className="border-b pb-4">
+          <CardTitle className="text-2xl font-semibold text-gray-800">
+            Leave Application Form
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Reason */}
+            <div>
+              <Label htmlFor="reason" className="block text-sm font-medium text-gray-700">
+                Reason for Leave
+              </Label>
+              <Textarea
+                placeholder="Type your reason here"
+                name="reason"
+                value={state.reason}
+                onChange={handleChange}
+                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
 
-              {/* From Date */}
+            {/* From Date */}
+            <div>
               <DatePicker
                 label="From Date"
                 name="fromDate"
@@ -134,45 +136,57 @@ const CreateLeave = () => {
                   dispatch({ type: "fromDate", payload: date })
                 }
               />
+            </div>
 
-              {/* To Date */}
+            {/* To Date */}
+            <div>
               <DatePicker
                 label="To Date"
                 name="toDate"
                 selectedDate={state.toDate}
-                onSelect={(date) => dispatch({ type: "toDate", payload: date })}
+                onSelect={(date) =>
+                  dispatch({ type: "toDate", payload: date })
+                }
               />
+            </div>
 
-              {/* Substitute Suggestion - Get Users Component */}
-              <div className="grid items-center max-w-sm gap-2 mt-4">
-                <Label htmlFor="substituteSuggestion" className="font-medium">
-                  Suggest a Substitute
-                </Label>
-                <GetUsers onSelectUser={handleSelectUser} />
-              </div>
+            {/* Substitute Suggestion */}
+            <div>
+              <Label
+                htmlFor="substituteSuggestion"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Suggest a Substitute
+              </Label>
+              <GetUsers onSelectUser={handleSelectUser} />
+            </div>
 
-              {/* Substitute chosen reason */}
+            {/* Substitute Suggestion Reason */}
+            <div>
+              <Label
+                htmlFor="suggestion"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Reason for Substitute Suggestion
+              </Label>
+              <Textarea
+                placeholder="Reason for substitute suggestion"
+                name="suggestion"
+                value={state.substituteSuggestion.suggestion}
+                onChange={handleChange}
+                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
 
-              <div className="grid items-center max-w-sm gap-2 mt-4">
-                <Label htmlFor="suggestion" className="font-medium">
-                Reason for substitute suggestion
-                </Label>
-                <Textarea
-                  placeholder="Reason for substitute suggestion"
-                  name="suggestion"
-                  value={state.substituteSuggestion.suggestion}
-                  onChange={handleChange}
-                />
-              </div>
-
-              {/* Submit Button */}
-              <div className="mt-4 flex justify-between">
-                <Button type="submit">Submit</Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+            {/* Submit Button */}
+            <div className="flex justify-end">
+              <Button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                Submit
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };
