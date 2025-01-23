@@ -14,8 +14,8 @@ const GetUsers: React.FC<GetUserProps> = ({ onSelectUser }) => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await newRequest.get("/users/");
-                console.log(response);
+                const response = await newRequest.get("/user/");
+                console.log(response.data);
                 setUsers(response.data);
             } catch (error) {
                 console.log("error while fetching users", error);

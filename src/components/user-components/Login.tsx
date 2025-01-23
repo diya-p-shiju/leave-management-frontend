@@ -24,6 +24,7 @@ const loginForm: React.FC = () => {
         email,
         password,
       });
+      localStorage.setItem("currentUser", JSON.stringify(success.data));
       if (success)
         [console.log("The user credentials has been successfuly submitted")];
     } catch (error) {

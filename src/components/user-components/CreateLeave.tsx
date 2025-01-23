@@ -1,3 +1,4 @@
+import React, { useReducer, useState } from "react";
 import { Textarea } from "../ui/textarea"; //shadcn imports
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
@@ -13,8 +14,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useReducer, useState } from "react";
 import newRequest from "@/utils/newRequest";
+import GetUsers from "@/components/atomic-Components/GetUsers"; // Import the GetUsers component
 
 const initialState: Leave = {
   applicant: "",
@@ -73,8 +74,6 @@ const CreateLeave = () => {
     } else {
       dispatch({ type: name, payload: value });
     }
-
-    console.log(state);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -93,8 +92,15 @@ const CreateLeave = () => {
         console.log("leave application successfully created");
       }
     } catch (error) {
-      setError(error);
+      console.log("error while applying leave application");
     }
+  };
+
+  const handleSelectUser = (userId: string) => {
+    dispatch({
+      type: "updateSubstituteSuggestion",
+      payload: { name: "suggestedUser", value: userId },
+    });
   };
 
   return (
@@ -106,9 +112,9 @@ const CreateLeave = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit}>
-              {/* reason */}
+              {/* Reason */}
               <div className="grid items-center max-w-sm gap-2">
-                <Label htmlFor="text" className="font-medium">
+                <Label htmlFor="reason" className="font-medium">
                   Reason for Leave
                 </Label>
                 <Textarea
@@ -119,15 +125,50 @@ const CreateLeave = () => {
                 />
               </div>
 
-              {/* fromDate */}
-              <DatePicker label="From Date" name="fromDate" selectedDate={state.fromDate} onSelect={(date)=>dispatch({type:"fromDate", payload:date})} />
-            
-              {/* toDate */}
-              <DatePicker label="To Date" name="toDate" selectedDate={state.toDate} onSelect={(date)=>dispatch({type:"toDate", payload:date})} />
+              {/* From Date */}
+              <DatePicker
+                label="From Date"
+                name="fromDate"
+                selectedDate={state.fromDate}
+                onSelect={(date) =>
+                  dispatch({ type: "fromDate", payload: date })
+                }
+              />
 
-              {/* substituteSuggestion */}
-              
+              {/* To Date */}
+              <DatePicker
+                label="To Date"
+                name="toDate"
+                selectedDate={state.toDate}
+                onSelect={(date) => dispatch({ type: "toDate", payload: date })}
+              />
 
+              {/* Substitute Suggestion - Get Users Component */}
+              <div className="grid items-center max-w-sm gap-2 mt-4">
+                <Label htmlFor="substituteSuggestion" className="font-medium">
+                  Suggest a Substitute
+                </Label>
+                <GetUsers onSelectUser={handleSelectUser} />
+              </div>
+
+              {/* Substitute chosen reason */}
+
+              <div className="grid items-center max-w-sm gap-2 mt-4">
+                <Label htmlFor="suggestion" className="font-medium">
+                Reason for substitute suggestion
+                </Label>
+                <Textarea
+                  placeholder="Reason for substitute suggestion"
+                  name="suggestion"
+                  value={state.substituteSuggestion.suggestion}
+                  onChange={handleChange}
+                />
+              </div>
+
+              {/* Submit Button */}
+              <div className="mt-4 flex justify-between">
+                <Button type="submit">Submit</Button>
+              </div>
             </form>
           </CardContent>
         </Card>
