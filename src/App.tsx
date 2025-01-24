@@ -23,6 +23,8 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
+
+            {/* Protected Routes  */}
             <Route path ="/user" element={<CreateUser/>}/>
             <Route path ="/admin" element={<Admin />}/>
             <Route path ="/hod" />
