@@ -8,6 +8,7 @@ import HigherAuthority from "./pages/HigherAuthority";
 const App = () => {
   return (
     <>
+    
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />

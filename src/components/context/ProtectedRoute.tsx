@@ -15,6 +15,9 @@ interface roleProps {
 const ProtectedRoute: React.FC<RouteProps> = ({ children, roles }) => {
   const { role, authenticated } = useContext<roleProps>(UserContext);
 
+  console.log("data from context", role, authenticated);
+  console.log("data from app.tsx", roles);
+
   if(authenticated === "false"){
     console.log("Not authenticated");
     return <Navigate to="/login" replace />;

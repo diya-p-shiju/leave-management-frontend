@@ -29,7 +29,7 @@
         const success = await newRequest.post("/auth/login", { email, password });
         const {name, role} = success.data.user;
         localStorage.setItem("user", JSON.stringify(name));
-        localStorage.setItem("role", JSON.stringify(role));
+        localStorage.setItem("role", role);
         localStorage.setItem("authenticated", "true");
         console.log("Login successful");
         navigate("/admin"); 
