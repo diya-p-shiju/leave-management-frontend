@@ -3,13 +3,15 @@
   import { motion } from "framer-motion";
   import newRequest from "@/utils/newRequest";
   import { AxiosError } from "axios";
-  import { Navigate } from "react-router-dom";
+  import { useNavigate } from "react-router-dom";
 
   const LoginForm: React.FC = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+
+    const navigate = useNavigate();
 
     function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
       const { name, value } = e.target;
@@ -29,8 +31,8 @@
         localStorage.setItem("user", JSON.stringify(name));
         localStorage.setItem("role", JSON.stringify(role));
         localStorage.setItem("authenticated", "true");
-        <Navigate to="/admin" replace />;
         console.log("Login successful");
+        navigate("/admin"); 
       } catch (error) {
         if (error instanceof AxiosError) {
           setError(error.response?.data?.message || "Invalid credentials");

@@ -1,16 +1,33 @@
 import { Navigate } from "react-router-dom";
-import { userContext } from "./ContextProvider";
+import { UserContext } from "./ContextProvider";
 import { useContext } from "react";
-import { Navigate } from "react-router-dom";
 
-const ProtectedRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
-  const { role, authenticated } = useContext(userContext);
+interface RouteProps {
+  children : React.ReactNode;
+  roles: string[];
+}
 
-  if(!authenticated){
+interface roleProps {
+  role  : string;
+  authenticated : string;
+}
+
+const ProtectedRoute: React.FC<RouteProps> = ({ children, roles }) => {
+  const { role, authenticated } = useContext<roleProps>(UserContext);
+
+  if(authenticated === "false"){
+    console.log("Not authenticated");
     return <Navigate to="/login" replace />;
 
   }
-  return (
 
-  );
+  if(!roles.includes(role)){
+    console.log("Role is not correct ");
+    return <Navigate to="/login" replace />
+
+  }
+
+  return children;
 }
+
+export default ProtectedRoute;
