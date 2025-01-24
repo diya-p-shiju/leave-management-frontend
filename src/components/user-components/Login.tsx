@@ -47,7 +47,7 @@
     }
 
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-100">
+      <div className="flex min-h-full h-96 bg-opacity-94  bg-white rounded-3xl items-center justify-center bg-gray-100">
         <motion.div
           className="w-full max-w-sm p-8 bg-white rounded-lg shadow-lg"
           initial={{ opacity: 0, y: 30 }}

@@ -4,13 +4,16 @@ import Admin from "./pages/Admin";
 import ProtectedRoute from "./components/context/ProtectedRoute";
 import User from "./pages/User";
 import HigherAuthority from "./pages/HigherAuthority";
+import HomePage from "./pages/HomePage";
+import Layout from "./pages/Layout";
 
 const App = () => {
   return (
     <>
-    
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Layout />} >
+          <Route index element={<HomePage />} />
           <Route path="/login" element={<Login />} />
 
           {/* Protected Routes for Admin Page  */}
@@ -42,6 +45,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
