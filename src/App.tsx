@@ -7,6 +7,9 @@ import HigherAuthority from "./pages/HigherAuthority";
 import HomePage from "./pages/HomePage";
 import Layout from "./pages/Layout";
 
+
+import TableView from "./components/user-components/TableView";
+
 const App = () => {
   return (
     <>
@@ -14,6 +17,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Layout />} >
           <Route index element={<HomePage />} />
+          <Route path="/table" element={<TableView />} />
           <Route path="/login" element={<Login />} />
 
           {/* Protected Routes for Admin Page  */}
