@@ -20,3 +20,12 @@ export interface Leave{
     actualLeaveDays: number;
 }
 
+export interface getUser {
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+    department: string;
+    departmentName: string;
+    
+}

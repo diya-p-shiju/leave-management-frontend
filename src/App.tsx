@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 
 import CreateLeave from "./components/user-components/CreateLeave";
+import CreateUser from "./components/user-components/CreateUser";
 
 
 const App = () => {
@@ -21,8 +22,8 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path ="/admin" element={<CreateLeave />}/>
-            <Route path ="/user" />
+            <Route path ="/admin" element={<CreateUser/>}/>
+            <Route path ="/user" element={<CreateLeave />}/>
             <Route path ="/hod" />
             <Route path ="/principal" />
             <Route path ="/director" />
