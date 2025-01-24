@@ -39,7 +39,7 @@ const GetUsers = () => {
           <TableRow>
             <TableHead className="w-[100px]">Name</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead className="text-right">Role</TableHead>
+            <TableHead>Role</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
