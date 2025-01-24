@@ -37,7 +37,7 @@ const CreateUser = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className=" flex items-center justify-center bg-gray-50">
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-semibold text-gray-700 text-center mb-6">
           Create User

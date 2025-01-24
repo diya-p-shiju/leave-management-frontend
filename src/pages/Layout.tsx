@@ -13,8 +13,8 @@ const Layout: React.FC  = () => {
   return (
     <div className="w-screen h-screen overflow-hidden bg-purple-900 grid grid-cols-12 grid-row-4 gap-10  py-10">
       <div className="col-start-2 col-span-10 row-start-1 row-span-1  ">
-        <div className="h-20 m-10 w-[1500px] opacity-40 shadow-2xl border-2 flex justify-between border-slate-100 rounded-2xl fixed z-20 ">
-        <span></span>
+        <div className="h-20 m-10 w-[1500px] opacity-40 shadow-2xl border-2 flex justify-between border-slate-100 rounded-2xl fixed z-20 p-2 ">
+        <span className="text-white text-4xl font-mono pt-2 font-extrabold">Leave System Inc.</span>
         <Button
             className=" rounded-full bg-purple text-sm font-mono p-10 hover:bg-purple-500 hover-text-white"
             onClick={handleClick}

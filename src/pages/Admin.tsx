@@ -6,7 +6,7 @@ const Admin = () => {
   const [showCreateUser, setShowCreateUser] = useState(false);
 
   return (
-    <div className="container mx-auto w-screen h-screen p-4">
+    <div className="container mx-auto w-full h-full p-4">
       {showCreateUser ? (
         <div className="absolute top-16 left-0 right-0 mx-auto w-full max-w-lg p-4 bg-white border border-gray-300 rounded shadow-lg">
           <button

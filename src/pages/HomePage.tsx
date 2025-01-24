@@ -11,21 +11,10 @@ const HomePage = () => {
   }
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-purple-900 grid grid-cols-12 grid-row-4 gap-10  py-10">
-      <div className="col-start-2 col-span-10 row-start-1 row-span-1  ">
-        <div className="h-20 m-10 w-[1500px] opacity-40 shadow-2xl border-2 flex justify-between border-slate-100 rounded-2xl fixed z-20 ">
-        <span></span>
-        <Button
-            className=" rounded-full bg-purple text-sm font-mono p-10 hover:bg-purple-500 hover-text-white"
-            onClick={handleClick}
-          >
-            Get Started
-          </Button>
-        </div>
-      </div>
-      <div className="col-start-2 col-span-6 row-start-2 row-span-3  ">
-        <div className=" text-wrap flex flex-col justify-start items-center p-10 h-full w-full py-20">
-          <p className="text-7xl font-semibold text-white font-sans text-left leading-normal mt-20">
+    <div className="w-full h-full overflow-hidden bg-purple-900  ">
+      <div className="flex justify-start pt-10 gap-10">
+        <div className=" text-wrap flex-col  justify-start items-center  h-full w-full ">
+          <p className="text-7xl text-wrap font-semibold text-white font-sans text-left leading-normal mt-20">
             Leave Management System so that you spend holidays stress-free.
           </p>
           <Button
@@ -34,11 +23,9 @@ const HomePage = () => {
           >
             Get Started
           </Button>
-        </div>
-      </div>
-      <div className="col-start-8 col-span-4 row-start-2 row-span-3  flex justify-center items-center">
+          </div>
         <Spiral />
-      </div>
+        </div>
     </div>
   );
 };
