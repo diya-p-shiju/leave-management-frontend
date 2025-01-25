@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import * as motion from "motion/react-client";
 import { useNavigate } from "react-router-dom";
 import employee from "../assets/employee.jpg";
+import LoginForm from "@/components/user-components/Login";
 
 const transition = { duration: 4, yoyo: Infinity, ease: "easeInOut" };
 const HomePage = () => {
@@ -19,13 +20,14 @@ const HomePage = () => {
             className="absolute inset-0 w-full h-full object-cover brightness-75 -z-20  "
           />
 <div className="container  min-h-[700px]  my-32 flex-col justify-center mx-44 overflow-hidden">
-  <div className=" h-4/5 w-4/5 m-20  overflow-hidden ">
-  <h1 className="text-white font-bold  text-8xl text-pretty leading-snug text-left">Streamline Your Employee Leave Management</h1>
+  <div className=" h-4/5 w-[1000px] m-20  overflow-hidden ">
+  <h1 className="text-white font-bold  text-8xl  text-pretty leading-tight text-left">Streamline Your Employee Leave Management System</h1>
   </div>
   <div className="ml-20 ">
-    <Button className="px-20 py-14 bg-white font-bold rounded-none text-green-600 hover:text-white hover:bg-green-500 hover:opacity-80 border-green-600 border-1 text-xl">Get Started</Button>
   </div>
-
+<div className="min-h-[700px] min-w-[500px] absolute right-40 top-40">
+  <LoginForm />
+</div>
 </div>
         </div>
   );

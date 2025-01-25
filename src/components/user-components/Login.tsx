@@ -47,14 +47,14 @@
     }
 
     return (
-      <div className="flex min-h-full h-96 bg-opacity-94  bg-white rounded-3xl items-center justify-center bg-gray-100">
+      <div className="flex min-h-full rounded-3xl mt-16 items-center justify-center ">
         <motion.div
-          className="w-full max-w-sm p-8 bg-white rounded-lg shadow-lg"
+          className="w-full max-w-sm p-8 h-[600px] bg-white bg-opacity-80 pt-20 rounded-lg shadow-lg flex flex-col gap-5"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <h1 className="text-2xl font-semibold text-center text-gray-800 mb-4">
+          <h1 className="text-2xl font-semibold text-center text-black mb-10">
             Login to Your Account
           </h1>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -64,23 +64,24 @@
               value={email}
               onChange={handleInputChange}
               placeholder="Email Address"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
-              whileFocus={{ scale: 1.02 }}
+              className="w-full p-3 border border-gray-300 rounded-lg  focus:outline-none mb-5"
+              whileFocus={{ scale: 1.01 }}
             />
+            {/* focus:ring-green-500 focus:ring-2 */}
             <motion.input
               type="password"
               name="password"
               value={password}
               onChange={handleInputChange}
               placeholder="Password"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+              className="w-full p-3 border border-gray-300 rounded-lg  focus:outline-none mb-5"
               whileFocus={{ scale: 1.02 }}
             />
             {error && <p className="text-sm text-red-500">{error}</p>}
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-purple-600 text-white py-3 rounded-lg shadow-md hover:bg-purple-700 disabled:opacity-50"
+              className="w-full bg-green-600 text-white py-3 rounded-lg shadow-md hover:bg-green-700 disabled:opacity-50"
             >
               {loading ? "Logging in..." : "Login"}
             </Button>
