@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import * as motion from "motion/react-client";
 import { useNavigate } from "react-router-dom";
+import employee from "../assets/employee.jpg";
 
 const transition = { duration: 4, yoyo: Infinity, ease: "easeInOut" };
 const HomePage = () => {
@@ -11,22 +12,22 @@ const HomePage = () => {
   }
 
   return (
-    <div className="w-full h-full overflow-hidden bg-purple-900  ">
-      <div className="flex justify-start pt-10 gap-10">
-        <div className=" text-wrap flex-col  justify-start items-center  h-full w-full ">
-          <p className="text-7xl text-wrap font-semibold text-white font-sans text-left leading-normal mt-20">
-            Leave Management System so that you spend holidays stress-free.
-          </p>
-          <Button
-            className="mt-10 rounded-full bg-purple-500 text-2xl font-mono p-10 "
-            onClick={handleClick}
-          >
-            Get Started
-          </Button>
-          </div>
-        <Spiral />
+    <div className="w-full h-full overflow-hidden  ">
+      <img
+            src={employee}
+            alt="Employee"
+            className="absolute inset-0 w-full h-full object-cover brightness-75 -z-20  "
+          />
+<div className="container  min-h-[700px]  my-32 flex-col justify-center mx-44 overflow-hidden">
+  <div className=" h-4/5 w-4/5 m-20  overflow-hidden ">
+  <h1 className="text-white font-bold  text-8xl text-pretty leading-snug text-left">Streamline Your Employee Leave Management</h1>
+  </div>
+  <div className="ml-20 ">
+    <Button className="px-20 py-14 bg-white font-bold rounded-none text-green-600 hover:text-white hover:bg-green-500 hover:opacity-80 border-green-600 border-1 text-xl">Get Started</Button>
+  </div>
+
+</div>
         </div>
-    </div>
   );
 };
 
