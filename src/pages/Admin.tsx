@@ -21,12 +21,6 @@ const Admin = () => {
         <GetAllUsers />
       )}
 
-      <button
-        onClick={() => setShowCreateUser(!showCreateUser)}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600"
-      >
-        {showCreateUser ? "View Users" : "Add User"}
-      </button>
     </div>
   );
 };

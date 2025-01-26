@@ -13,7 +13,7 @@ interface User {
   email: string;
   password: string;
   role: string;
-  department : string;
+  department : number;
 }
 
 // Department type that is going to be cached as well

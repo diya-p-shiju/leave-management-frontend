@@ -9,7 +9,6 @@ type UserFormProps = {
     _id?: string;
     name?: string;
     email?: string;
-    password?: string;
     role?: string;
     department?: string;
   };
@@ -22,7 +21,6 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
   const [formData, setFormData] = useState({
     name: initialData?.name || "",
     email: initialData?.email || "",
-    password: initialData?.password || "",
     role: initialData?.role || "",
     department: initialData?.department || "",
   });
@@ -32,7 +30,6 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
       setFormData({
         name: initialData.name || "",
         email: initialData.email || "",
-        password: initialData.password || "",
         role: initialData.role || "",
         department: initialData.department || "",
       });
@@ -86,14 +83,6 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
             value={formData.email}
             onChange={handleChange}
             placeholder="Email"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
-          />
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Password"
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
           />
           <select
