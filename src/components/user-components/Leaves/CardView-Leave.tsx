@@ -1,6 +1,6 @@
 import React from 'react'
-import TableView from './TableView'
-import { Button } from '../ui/button'
+import TableView from './TableView-Leave'
+import { Button } from '../../ui/button'
 import { LeaveDataProps } from '@/types/types'
 
 

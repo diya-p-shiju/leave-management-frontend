@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import newRequest from "@/utils/newRequest";
-import GetUsers from "@/components/atomic-Components/GetUsers"; // Import the GetUsers component
+import GetUsers from "@/components/atomic-Components/GetSimilarUsers"; // Import the GetUsers component
 
 const initialState: Leave = {
   applicant: "",

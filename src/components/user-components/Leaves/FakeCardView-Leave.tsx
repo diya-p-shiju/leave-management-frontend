@@ -1,5 +1,5 @@
 import { LeaveDataProps } from "@/types/types";
-import CardView from "./CardView";
+import CardView from "./CardView-Leave";
 
 
 

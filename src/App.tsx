@@ -1,16 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./components/user-components/Login";
+import Login from "./components/user-components/Auth/Login";
 import Admin from "./pages/Admin";
 import ProtectedRoute from "./components/context/ProtectedRoute";
 import User from "./pages/User";
 import HigherAuthority from "./pages/HigherAuthority";
 import HomePage from "./pages/HomePage";
 import Layout from "./pages/Layout";
-import CardView from "./components/user-components/CardView";
+import CardView from "./components/user-components/Leaves/CardView-Leave";
 
 
-import TableView from "./components/user-components/TableView";
-import FakeCardView from "./components/user-components/FakeCardView";
+import TableView from "./components/user-components/Leaves/TableView-Leave";
+import FakeCardView from "./components/user-components/Leaves/FakeCardView-Leave";
+import GetUserById from "./components/user-components/Users/GetUserById";
 
 const App = () => {
   return (
@@ -31,6 +32,15 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/admin/user/:id"
+            element={
+              <ProtectedRoute roles={["admin", "hod", "principal"]}>
+                <GetUserById />
+              </ProtectedRoute>
+            }
+          />
+     
 
           {/* Protected Routes for User Page  */}
           <Route
@@ -52,6 +62,7 @@ const App = () => {
             }
           />
           </Route>
+       
         </Routes>
       </BrowserRouter>
     </>

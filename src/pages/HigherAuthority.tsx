@@ -1,4 +1,4 @@
-import TableView from "@/components/user-components/TableView"
+import TableView from "@/components/user-components/Leaves/TableView-Leave"
 
 const HigherAuthority = () => {
   return (

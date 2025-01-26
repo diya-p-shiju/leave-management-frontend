@@ -2,30 +2,29 @@ import { createContext, useContext } from "react";
 import newRequest from "@/utils/newRequest";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 
-//User type that is going to be cached
+// User type that is going to be cached
 interface User {
   id: number;
   name: string;
-  email:string;
-  role:string;
-
+  email: string;
+  role: string;
 }
 
-// department type that is going to be cached as well
+// Department type that is going to be cached as well
 interface Department {
   id: number;
   name: string;
-  description : string;
-  
+  description: string;
 }
 
-//for creating a context of data
+// For creating a context of data
 interface DataContextType {
   users: User[];
   departments: Department[];
   isLoading: boolean;
   refetchUsers: () => void;
   refetchDepartments: () => void;
+  error: string | null;
 }
 
 // Create the context with default values
@@ -33,8 +32,9 @@ const DataContext = createContext<DataContextType>({
   users: [],
   departments: [],
   isLoading: true,
-  refetchUsers: () => {}, 
-  refetchDepartments: () => {}, 
+  refetchUsers: () => {},
+  refetchDepartments: () => {},
+  error: null,
 });
 
 // Initialize the QueryClient
@@ -68,12 +68,13 @@ const fetchDepartments = async (): Promise<Department[]> => {
   }
 };
 
-// Context provider component, triggers the fetch functions, get the data and save it as a context via DataContext.Provider
-export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {  
-  const { data: users, isLoading: usersLoading, refetch: refetchUsers} = useQuery<User[]>(["users"], fetchUsers);
-  const { data: departments, isLoading: departmentsLoading, refetch: refetchDepartments } = useQuery<Department[]>(["departments"], fetchDepartments);
+// Context provider component, triggers the fetch functions, gets the data, and saves it as a context via DataContext.Provider
+export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { data: users, isLoading: usersLoading, isFetching: usersFetching, error: usersError, refetch: refetchUsers } = useQuery<User[]>(["users"], fetchUsers);
+  const { data: departments, isLoading: departmentsLoading, isFetching: departmentsFetching, error: departmentsError, refetch: refetchDepartments } = useQuery<Department[]>(["departments"], fetchDepartments);
 
-  const isLoading = usersLoading || departmentsLoading;
+  const isLoading = usersLoading || departmentsLoading || usersFetching || departmentsFetching;
+  const error = usersError || departmentsError ? "Error occurred while fetching data" : null;
 
   return (
     <DataContext.Provider
@@ -82,7 +83,8 @@ export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
         departments: departments || [],
         isLoading,
         refetchUsers,
-        refetchDepartments
+        refetchDepartments,
+        error,
       }}
     >
       {children}
@@ -90,7 +92,7 @@ export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
   );
 };
 
-// Custom hook for accessing context 
+// Custom hook for accessing context
 export const useData = () => {
   return useContext(DataContext);
 };

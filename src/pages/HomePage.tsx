@@ -3,7 +3,7 @@ import * as motion from "motion/react-client";
 import { motion as m } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import employee from "../assets/employee.jpg";
-import LoginForm from "@/components/user-components/Login";
+import LoginForm from "@/components/user-components/Auth/Login";
 
 const HomePage = () => {
   const navigate = useNavigate();
