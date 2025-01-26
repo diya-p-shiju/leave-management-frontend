@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useData } from "@/components/context/DataProvider";
 import { Button } from "@/components/ui/button";
 import { Sheet, Table } from "@mui/joy";
+import UserForm from "./UserForm";
 
 // Define the structure of the user data
 type User = {
@@ -43,6 +44,7 @@ const GetUsers = () => {
 
 
   return (
+    <>
     <Sheet
       variant="solid"
       color="primary"
@@ -94,6 +96,8 @@ const GetUsers = () => {
         </tbody>
       </Table>
     </Sheet>
+<UserForm />
+    </>
   );
 };
 

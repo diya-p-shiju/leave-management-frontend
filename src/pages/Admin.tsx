@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CreateUser from "@/components/user-components/Users/CreateUser";
-import GetAllUsers from "../components/user-components/Users/GetAllUsers";
+import GetAllUsers from "../components/user-components/Users/UserView";
 
 const Admin = () => {
   const [showCreateUser, setShowCreateUser] = useState(false);
