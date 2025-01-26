@@ -1,6 +1,6 @@
 import { useState } from "react";
-import GetUsers from "@/components/user-components/Users/GetAllUsers";
 import CreateUser from "@/components/user-components/Users/CreateUser";
+import GetAllUsers from "../components/user-components/Users/GetAllUsers";
 
 const Admin = () => {
   const [showCreateUser, setShowCreateUser] = useState(false);
@@ -18,7 +18,7 @@ const Admin = () => {
           <CreateUser />
         </div>
       ) : (
-        <GetUsers />
+        <GetAllUsers />
       )}
 
       <button

@@ -9,34 +9,30 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import newRequest from "@/utils/newRequest";
+import { useData } from "@/components/context/DataProvider";
+import {User} from "../../../types/types";
+import { Button } from "@/components/ui/button";
 
 // Define the structure of the user data
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-  department: string;
-}
+
 
 const GetUsers = () => {
-  const [users, setUsers] = useState<User[]>([]);
+  const { users, departments, isLoading, error, refetchUsers, refetchDepartments } = useData();
 
-  // Fetch users from the backend API
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await newRequest.get("/user");
-        setUsers(response.data);
-      } catch (err: any) {
-        console.error("Error while fetching users:", err);
-      }
-    };
+  if(isLoading){
+    return <p>Loading...</p>
+  }
+  
+  if(error){
+    return <p>{error}</p>
+  }
 
-    fetchUsers();
-  }, []);
+  const getDepartmentName = (departmentId :string) =>{
+    const success = departments.find((dept)=> (dept._id).toString() === (departmentId).toString())
+    console.log(typeof(success?._id))
+    return success ? success.name : "unknown name";
+  }
+
 
   return (
     <div style={{ padding: "16px" }}>
@@ -53,6 +49,8 @@ const GetUsers = () => {
               <TableCell><strong>Role</strong></TableCell>
               <TableCell><strong>Password</strong></TableCell>
               <TableCell><strong>Department Name</strong></TableCell>
+              <TableCell><strong>Options</strong></TableCell>
+              
             </TableRow>
           </TableHead>
           <TableBody>
@@ -66,7 +64,12 @@ const GetUsers = () => {
                 {/* <TableCell>{"*".repeat(user.password.length)}</TableCell> */}
 
                 <TableCell>{user.password}</TableCell>
-                <TableCell>{user.department}</TableCell>
+                <TableCell>{getDepartmentName(user.department)}</TableCell>
+                <TableCell>
+                <Button className="m-2">Update Item</Button>
+                <Button variant="destructive">Delete Item</Button>
+                </TableCell>
+                
               </TableRow>
             ))}
           </TableBody>
