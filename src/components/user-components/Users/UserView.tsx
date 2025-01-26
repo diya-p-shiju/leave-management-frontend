@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Sheet, Table } from "@mui/joy";
 import UserForm from "./UserForm";
 import newRequest from "@/utils/newRequest";
+import DeleteConfirmation from "../Misc-Pages/DeleteConfirmation";
+
 
 type User = {
   _id: string;
@@ -22,6 +24,8 @@ const GetUsers = () => {
   const [formMode, setFormMode] = useState<"create" | "update">("create");
   const [selectedUser, setSelectedUser] = useState<Partial<User> | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<string | null>(null);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -54,36 +58,41 @@ const GetUsers = () => {
     setSelectedUser(null);
   };
 
-  const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
-    if (!confirmDelete) return;
+  const handleDelete = (id: string) => {
+    setUserToDelete(id); // Store the user ID to be deleted
+    setIsModalOpen(true); // Open the confirmation modal
+  };
 
+  const handleConfirmDelete = async () => {
+    if (!userToDelete) return;
     setIsDeleting(true);
 
     try {
-      await newRequest.delete(`/user/${id}`);
+      await newRequest.delete(`/user/${userToDelete}`);
       alert("User deleted successfully");
-      // Optionally trigger a data refresh here
+      refetchUsers();
     } catch (err) {
       console.error("Failed to delete user:", err);
       alert("Failed to delete user. Please try again.");
     } finally {
       setIsDeleting(false);
+      setIsModalOpen(false); // Close the modal after confirming deletion
+      setUserToDelete(null); // Clear the user ID
     }
-   
   };
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false); // Close the modal without deleting
+    setUserToDelete(null); // Clear the user ID
+  };
 
   return (
     <div className="my-20">
-     <div className="flex justify-between ">
-     <Button className="mb-4" onClick={handleCreate}>
-        Create New User
-      </Button>
-      <Button className="border-2 border-green-500 hover:bg-green-500 hover:border-green-500 hover" variant="outline" >
-        Logout
-      </Button>
-     </div>
+      <div className="flex justify-end">
+        <Button className="mb-4" onClick={handleCreate}>
+          Create New User
+        </Button>
+      </div>
       <Sheet
         variant="solid"
         color="primary"
@@ -104,7 +113,7 @@ const GetUsers = () => {
         })}
       >
         <Table stripe="odd" hoverRow>
-          <caption>Users List </caption>
+          <caption>Users List</caption>
           <thead>
             <tr>
               <th style={{ width: "15%" }}>User ID</th>
@@ -151,6 +160,14 @@ const GetUsers = () => {
           onClose={handleCloseForm}
         />
       )}
+
+      {/* Confirmation Modal */}
+      <DeleteConfirmation
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+        departmentName={userToDelete ? users.find(user => user._id === userToDelete)?.name || "" : ""}
+      />
     </div>
   );
 };

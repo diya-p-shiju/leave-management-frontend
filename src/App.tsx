@@ -1,17 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./components/user-components/Auth/Login";
 import Admin from "./pages/Admin";
 import ProtectedRoute from "./components/context/ProtectedRoute";
 import User from "./pages/User";
 import HigherAuthority from "./pages/HigherAuthority";
 import HomePage from "./pages/HomePage";
 import Layout from "./pages/Layout";
-import CardView from "./components/user-components/Leaves/CardView-Leave";
-
-
-import TableView from "./components/user-components/Leaves/TableView-Leave";
-import FakeCardView from "./components/user-components/Leaves/FakeCardView-Leave";
 import GetUserById from "./components/user-components/Users/GetUserById";
+import Error from "./components/user-components/Misc-Pages/Error"
 
 const App = () => {
   return (
@@ -20,8 +15,6 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Layout />} >
           <Route index element={<HomePage />} />
-          <Route path="/table" element={<TableView />} />
-          <Route path="/card" element={<FakeCardView />} />
 
           {/* Protected Routes for Admin Page  */}
           <Route
@@ -46,7 +39,7 @@ const App = () => {
           <Route
             path="/user"
             element={
-              <ProtectedRoute roles={["nonteaching-staff", "teaching-staff"]}>
+              <ProtectedRoute roles={["nonteaching-staff", "teaching-staff","hod","principal"]}>
                 <User />
               </ProtectedRoute>
             }
@@ -62,7 +55,7 @@ const App = () => {
             }
           />
           </Route>
-       
+       <Route path="*" element={<Error />} />
         </Routes>
       </BrowserRouter>
     </>

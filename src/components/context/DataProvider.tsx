@@ -5,6 +5,7 @@ import {
   QueryClientProvider,
   useQuery,
 } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
 
 // User type that is going to be cached
 interface User {
@@ -139,7 +140,8 @@ interface AppWrapperProps {
 export const AppWrapper: React.FC<AppWrapperProps> = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <DataContextProvider>{children}</DataContextProvider>
+      <DataContextProvider>
+      <ToastContainer />{children}</DataContextProvider>
     </QueryClientProvider>
   );
 };
