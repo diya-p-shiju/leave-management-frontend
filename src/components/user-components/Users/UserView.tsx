@@ -92,6 +92,7 @@ const GetUsers = () => {
         <Button className="mb-4" onClick={handleCreate}>
           Create New User
         </Button>
+       
       </div>
       <Sheet
         variant="solid"
