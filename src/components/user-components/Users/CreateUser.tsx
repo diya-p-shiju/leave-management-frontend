@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-import { User } from "../../types";
+import {User} from "../../../types/types"
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
 

@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useData } from "@/components/context/DataProvider";
+import { useMutation } from "@tanstack/react-query";
+import newRequest from "@/utils/newRequest";
 
 type UserFormProps = {
   mode: "create" | "update";
@@ -11,18 +13,20 @@ type UserFormProps = {
     email?: string;
     role?: string;
     department?: string;
+    password?: string;
   };
   onClose: () => void;
 };
 
 const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
-  const { departments } = useData();
+  const { departments, refetchUsers } = useData();
 
   const [formData, setFormData] = useState({
     name: initialData?.name || "",
     email: initialData?.email || "",
     role: initialData?.role || "",
     department: initialData?.department || "",
+    password: initialData?.password || "", // Add password field here
   });
 
   useEffect(() => {
@@ -32,9 +36,40 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
         email: initialData.email || "",
         role: initialData.role || "",
         department: initialData.department || "",
+        password: "", // Do not prefill the password for update
       });
     }
   }, [mode, initialData]);
+
+  // Mutation for creating a user
+  const createMutation = useMutation({
+    mutationFn: (data: typeof formData) => {
+      return newRequest.post("/user", data); // Create user API call
+    },
+    onSuccess: () => {
+      console.log("User created successfully!");
+      refetchUsers();  // Refetch the users list
+      onClose();
+    },
+    onError: (error) => {
+      console.error("Error creating user", error);
+    },
+  });
+
+  // Mutation for updating a user
+  const updateMutation = useMutation({
+    mutationFn: (data: typeof formData) => {
+      return newRequest.put(`/user/${initialData?._id}`, data); // Update user API call
+    },
+    onSuccess: () => {
+      console.log("User updated successfully!");
+      refetchUsers();  // Refetch the users list
+      onClose();
+    },
+    onError: (error) => {
+      console.error("Error updating user", error);
+    },
+  });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -45,13 +80,14 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
     e.preventDefault();
     try {
       if (mode === "create") {
-        // Create logic here
-        console.log("Creating user", formData);
+        if (!formData.password) {
+          alert("Password is required when creating a user");
+          return;
+        }
+        createMutation.mutate(formData);  // Trigger create mutation
       } else {
-        // Update logic here
-        console.log("Updating user", formData);
+        updateMutation.mutate(formData);  // Trigger update mutation
       }
-      onClose();
     } catch (error) {
       console.error("Error in form submission", error);
     }
@@ -85,6 +121,15 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
             placeholder="Email"
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
           />
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
+            required={mode === "create"} // Make password required only for create
+          />
           <select
             name="role"
             value={formData.role}
@@ -92,9 +137,12 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
           >
             <option value="">Select Role</option>
-            <option value="admin">Admin</option>
-            <option value="teacher">Teacher</option>
+            <option value="teaching-staff">Teaching Staff</option>
+            <option value="non-teaching-staff">Non-Teaching Staff</option>
+            <option value="hod">HOD</option>
             <option value="principal">Principal</option>
+            <option value="director">Director</option>
+            <option value="admin">Admin</option>
           </select>
           <select
             name="department"
@@ -120,6 +168,7 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
             <Button
               type="submit"
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              disabled={createMutation.isLoading || updateMutation.isLoading}
             >
               {mode === "create" ? "Create" : "Update"}
             </Button>

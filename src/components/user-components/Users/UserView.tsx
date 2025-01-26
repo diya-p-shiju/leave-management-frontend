@@ -3,7 +3,7 @@ import { useData } from "@/components/context/DataProvider";
 import { Button } from "@/components/ui/button";
 import { Sheet, Table } from "@mui/joy";
 import UserForm from "./UserForm";
-import newRequest from "@/utils/newRequest"; // Assuming you have a request utility
+import newRequest from "@/utils/newRequest";
 
 type User = {
   _id: string;
@@ -11,11 +11,11 @@ type User = {
   email: string;
   password: string;
   role: string;
-  department: string;
+  department: number;
 };
 
 const GetUsers = () => {
-  const { users, departments, isLoading, error } = useData();
+  const { users, departments, isLoading, error, refetchUsers, refetchDepartments } = useData();
 
   // State to control the UserForm visibility and mode
   const [showForm, setShowForm] = useState(false);
@@ -39,13 +39,13 @@ const GetUsers = () => {
   // Handlers for showing and hiding the form
   const handleCreate = () => {
     setFormMode("create");
-    setSelectedUser(null); // No user data for create mode
+    setSelectedUser(null); 
     setShowForm(true);
   };
 
   const handleUpdate = (user: User) => {
     setFormMode("update");
-    setSelectedUser(user); // Pass the user data for update mode
+    setSelectedUser(user); 
     setShowForm(true);
   };
 
@@ -70,13 +70,20 @@ const GetUsers = () => {
     } finally {
       setIsDeleting(false);
     }
+   
   };
 
+
   return (
-    <>
-      <Button className="mb-4" onClick={handleCreate}>
+    <div className="my-20">
+     <div className="flex justify-between ">
+     <Button className="mb-4" onClick={handleCreate}>
         Create New User
       </Button>
+      <Button className="border-2 border-green-500 hover:bg-green-500 hover:border-green-500 hover" variant="outline" >
+        Logout
+      </Button>
+     </div>
       <Sheet
         variant="solid"
         color="primary"
@@ -97,7 +104,7 @@ const GetUsers = () => {
         })}
       >
         <Table stripe="odd" hoverRow>
-          <caption>A List of Users Fetched from the API.</caption>
+          <caption>Users List </caption>
           <thead>
             <tr>
               <th style={{ width: "15%" }}>User ID</th>
@@ -144,7 +151,7 @@ const GetUsers = () => {
           onClose={handleCloseForm}
         />
       )}
-    </>
+    </div>
   );
 };
 
