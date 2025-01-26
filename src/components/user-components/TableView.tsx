@@ -13,7 +13,6 @@ import { Box, Button, Typography } from '@mui/material';
 //Mock Data (replace with actual API fetch later)
 const data = [
   {
-    _id: '679256e3f8bffa21b8151ce5',
     applicant: {
       name: 'John Doe',
       email: 'johndoe@example.com',
@@ -33,7 +32,6 @@ const data = [
 ];
 
 export type LeaveRequest = {
-  _id: string;
   applicant: {
     name: string;
     email: string;
@@ -54,11 +52,11 @@ export type LeaveRequest = {
 const Example = () => {
   const columns = useMemo<MRT_ColumnDef<LeaveRequest>[]>(
     () => [
-      {
-        accessorKey: '_id',
-        header: 'ID',
-        size: 200,
-      },
+      // {
+      //   accessorKey: '_id',
+      //   header: 'ID',
+      //   size: 200,
+      // },
       {
         accessorFn: (row) => row.applicant.name,
         id: 'name',

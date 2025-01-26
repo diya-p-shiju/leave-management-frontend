@@ -63,7 +63,9 @@ const GetUsers = () => {
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.role}</TableCell>
                 {/* Mask password with asterisks */}
-                <TableCell>{"*".repeat(user.password.length)}</TableCell>
+                {/* <TableCell>{"*".repeat(user.password.length)}</TableCell> */}
+
+                <TableCell>{user.password}</TableCell>
                 <TableCell>{user.department}</TableCell>
               </TableRow>
             ))}

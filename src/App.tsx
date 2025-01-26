@@ -6,9 +6,11 @@ import User from "./pages/User";
 import HigherAuthority from "./pages/HigherAuthority";
 import HomePage from "./pages/HomePage";
 import Layout from "./pages/Layout";
+import CardView from "./components/user-components/CardView";
 
 
 import TableView from "./components/user-components/TableView";
+import FakeCardView from "./components/user-components/FakeCardView";
 
 const App = () => {
   return (
@@ -18,7 +20,7 @@ const App = () => {
           <Route path="/" element={<Layout />} >
           <Route index element={<HomePage />} />
           <Route path="/table" element={<TableView />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/card" element={<FakeCardView />} />
 
           {/* Protected Routes for Admin Page  */}
           <Route
