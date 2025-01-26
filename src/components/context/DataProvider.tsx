@@ -24,6 +24,8 @@ interface DataContextType {
   users: User[];
   departments: Department[];
   isLoading: boolean;
+  refetchUsers: () => void;
+  refetchDepartments: () => void;
 }
 
 // Create the context with default values
@@ -31,6 +33,8 @@ const DataContext = createContext<DataContextType>({
   users: [],
   departments: [],
   isLoading: true,
+  refetchUsers: () => {}, 
+  refetchDepartments: () => {}, 
 });
 
 // Initialize the QueryClient
@@ -66,8 +70,8 @@ const fetchDepartments = async (): Promise<Department[]> => {
 
 // Context provider component, triggers the fetch functions, get the data and save it as a context via DataContext.Provider
 export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {  
-  const { data: users, isLoading: usersLoading } = useQuery<User[]>(["users"], fetchUsers);
-  const { data: departments, isLoading: departmentsLoading } = useQuery<Department[]>(["departments"], fetchDepartments);
+  const { data: users, isLoading: usersLoading, refetch: refetchUsers} = useQuery<User[]>(["users"], fetchUsers);
+  const { data: departments, isLoading: departmentsLoading, refetch: refetchDepartments } = useQuery<Department[]>(["departments"], fetchDepartments);
 
   const isLoading = usersLoading || departmentsLoading;
 
@@ -77,6 +81,8 @@ export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
         users: users || [],
         departments: departments || [],
         isLoading,
+        refetchUsers,
+        refetchDepartments
       }}
     >
       {children}
