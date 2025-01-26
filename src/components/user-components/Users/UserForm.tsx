@@ -29,6 +29,8 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
     password: initialData?.password || "", // Add password field here
   });
 
+  const [errors, setErrors] = useState<any>({}); // State to track error messages
+
   useEffect(() => {
     if (mode === "update" && initialData) {
       setFormData({
@@ -78,12 +80,45 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrors({}); // Clear previous errors
+
+    // Basic validation for create mode
+    if (mode === "create") {
+      let isValid = true;
+      const newErrors: any = {};
+
+      // Check if password is provided and has at least 6 characters
+      if (!formData.password || formData.password.length < 6) {
+        newErrors.password = "Password must be at least 6 characters";
+        isValid = false;
+      }
+
+      // Check for missing fields (name, email, role, department)
+      if (!formData.name) {
+        newErrors.name = "Name is required";
+        isValid = false;
+      }
+      if (!formData.email) {
+        newErrors.email = "Email is required";
+        isValid = false;
+      }
+      if (!formData.role) {
+        newErrors.role = "Role is required";
+        isValid = false;
+      }
+      if (!formData.department) {
+        newErrors.department = "Department is required";
+        isValid = false;
+      }
+
+      if (!isValid) {
+        setErrors(newErrors);
+        return; // Stop form submission if validation fails
+      }
+    }
+
     try {
       if (mode === "create") {
-        if (!formData.password) {
-          alert("Password is required when creating a user");
-          return;
-        }
         createMutation.mutate(formData);  // Trigger create mutation
       } else {
         updateMutation.mutate(formData);  // Trigger update mutation
@@ -105,58 +140,78 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
           {mode === "create" ? "Create User" : "Update User"}
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Name"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
-          />
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
-          />
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Password"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
-            required={mode === "create"} // Make password required only for create
-          />
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
-          >
-            <option value="">Select Role</option>
-            <option value="teaching-staff">Teaching Staff</option>
-            <option value="non-teaching-staff">Non-Teaching Staff</option>
-            <option value="hod">HOD</option>
-            <option value="principal">Principal</option>
-            <option value="director">Director</option>
-            <option value="admin">Admin</option>
-          </select>
-          <select
-            name="department"
-            value={formData.department}
-            onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
-          >
-            <option value="">Select Department</option>
-            {departments.map((dept) => (
-              <option key={dept._id} value={dept._id}>
-                {dept.name}
-              </option>
-            ))}
-          </select>
+          <div>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Name"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
+            />
+            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+          </div>
+
+          <div>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
+            />
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+          </div>
+
+          <div>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Password"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
+              required={mode === "create"} // Make password required only for create
+            />
+            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+          </div>
+
+          <div>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
+            >
+              <option value="">Select Role</option>
+              <option value="teaching-staff">Teaching Staff</option>
+              <option value="non-teaching-staff">Non-Teaching Staff</option>
+              <option value="hod">HOD</option>
+              <option value="principal">Principal</option>
+              <option value="director">Director</option>
+              <option value="admin">Admin</option>
+            </select>
+            {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role}</p>}
+          </div>
+
+          <div>
+            <select
+              name="department"
+              value={formData.department}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none"
+            >
+              <option value="">Select Department</option>
+              {departments.map((dept) => (
+                <option key={dept._id} value={dept._id}>
+                  {dept.name}
+                </option>
+              ))}
+            </select>
+            {errors.department && <p className="text-red-500 text-sm mt-1">{errors.department}</p>}
+          </div>
+
           <div className="flex justify-end space-x-3">
             <Button
               type="button"
