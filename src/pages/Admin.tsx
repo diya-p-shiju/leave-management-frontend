@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import CreateUser from "@/components/user-components/Users/CreateUser";
 import GetAllUsers from "../components/user-components/Users/UserView";
 import DepartmentView from "@/components/user-components/Departments/DepartmentView";
 import LogoutButton from "@/components/user-components/Auth/Logout";
@@ -20,7 +19,7 @@ const Admin = () => {
               setShowDepartments(false);
               setShowCreateUser(false); 
             }}
-            className="bg-green-600 text-white hover:bg-green-700"
+          
           >
             Users
           </Button>
@@ -29,7 +28,7 @@ const Admin = () => {
               setShowCreateUser(false); 
               setShowDepartments(true);
             }}
-            className="bg-green-600 text-white hover:bg-green-700"
+          
           >
             Departments
           </Button>

@@ -92,14 +92,14 @@ const GetUsers = () => {
       </div>
 
       <Sheet
-        variant="solid"
-        color="primary"
+        variant="plain"
+        color="neutral"
         invertedColors
         sx={(theme) => ({
           pt: 1,
           borderRadius: "sm",
           transition: "0.3s",
-          background: `linear-gradient(45deg, ${theme.vars.palette.primary[500]}, ${theme.vars.palette.primary[400]})`,
+          background: "transparent" ,
           "& tr:last-child": {
             "& td:first-child": {
               borderBottomLeftRadius: "8px",
@@ -138,7 +138,7 @@ const GetUsers = () => {
                   </Button>
                   <Button
                     className="m-2"
-                    variant="destructive"
+                    variant="secondary"
                     disabled={isDeleting}
                     onClick={() => handleDelete(user._id)}
                   >

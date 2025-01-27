@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Admin from "./pages/Admin";
 import ProtectedRoute from "./components/context/ProtectedRoute";
 import User from "./pages/User";
-import HigherAuthority from "./pages/HigherAuthority";
 import HomePage from "./pages/HomePage";
 import Layout from "./pages/Layout";
 import GetUserById from "./components/user-components/Users/GetUserById";
@@ -48,14 +47,7 @@ const App = () => {
           />
 
           {/* Protected Routes for Higher Authority - HOD, DIRECTOR, PRINCIPAL  */}
-          {/* <Route
-            path="/high"
-            element={
-              <ProtectedRoute roles={["hod", "director", "principal"]}>
-                <HigherAuthority />
-              </ProtectedRoute>
-            }
-          /> */}
+    
           </Route>
        <Route path="*" element={<Error />} />
         </Routes>
