@@ -8,7 +8,7 @@ const NavigatePage = () => {
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setRedirect(true);
-    }, 2000);
+    }, 3000);
     return () => clearTimeout(timer);
   }, []);
 
