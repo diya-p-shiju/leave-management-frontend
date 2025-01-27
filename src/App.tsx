@@ -8,6 +8,7 @@ import GetUserById from "./components/user-components/Users/GetUserById";
 import Error from "./components/user-components/Misc-Pages/Error"
 import NavigatePage from "./components/user-components/Auth/NavigatePage";
 import UserView from "./components/user-components/Users/UserView";
+import DepartmentView from "./components/user-components/Departments/DepartmentView";
 
 const App = () => {
   return (
@@ -24,6 +25,14 @@ const App = () => {
             element={
               <ProtectedRoute roles={["admin"]}>
                 <Admin children={<UserView />} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/department"
+            element={
+              <ProtectedRoute roles={["admin"]}>
+                <Admin children={<DepartmentView />} />
               </ProtectedRoute>
             }
           />

@@ -117,7 +117,7 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ mode, initialData, onCl
               </Button>
               <Button
                 type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                className="bg-black text-white px-4 py-2 rounded-lg hover:bg-slate-800"
                 disabled={createMutation.isLoading || updateMutation.isLoading}
               >
                 {mode === "create" ? "Create" : "Update"}

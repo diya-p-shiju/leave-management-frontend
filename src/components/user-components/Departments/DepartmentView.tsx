@@ -71,16 +71,19 @@ const DepartmentView = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mr-10 ml-5 ">
+      <div className="flex justify-between mt-5">
       <h1 className="text-2xl font-semibold">Departments</h1>
 
-      {/* Button to open the Department Form in Create Mode */}
-      <Button
-        onClick={handleCreateNewDepartment} // Open the form in create mode
-        className="bg-green-600 text-white mb-4"
-      >
-        Create New Department
-      </Button>
+{/* Button to open the Department Form in Create Mode */}
+<Button
+  onClick={handleCreateNewDepartment} // Open the form in create mode
+  className="bg-primary mb-4 text-white hover:text-black hover:border-black hover:border-slate-700"
+  variant="secondary"
+>
+  Create New Department
+</Button>
+      </div>
 
       <div className="space-y-2">
         {departments.map((department) => (
@@ -92,13 +95,13 @@ const DepartmentView = () => {
             <div className="space-x-3">
               <Button
                 onClick={() => handleEdit(department)} // Open the form in update mode
-                className="bg-yellow-500 text-white"
+                className="bg-primary"
               >
                 Edit
               </Button>
               <Button
                 onClick={() => handleDelete(department._id)}
-                className="bg-red-500 text-white"
+                className="bg-destructive "
                 disabled={isDeleting}
               >
                 {isDeleting ? "Deleting..." : "Delete"}

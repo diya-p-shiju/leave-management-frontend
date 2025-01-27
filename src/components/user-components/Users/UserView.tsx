@@ -50,10 +50,6 @@ const GetUsers = () => {
     setShowForm(true);
   };
 
-  const handleCloseForm = () => {
-    setShowForm(false);
-    setSelectedUser(null);
-  };
 
   const handleDelete = (id: string) => {
     setUserToDelete(id);
@@ -171,3 +167,8 @@ const GetUsers = () => {
 };
 
 export default GetUsers;
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setSelectedUser(null);
+  };

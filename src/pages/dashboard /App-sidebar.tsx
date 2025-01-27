@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   AudioWaveform,
   BookOpen,
@@ -12,19 +12,19 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
-} from "lucide-react"
+} from "lucide-react";
 
-import { NavMain } from "./nav-main"
-import { NavProjects } from "./nav-projects"
-import { NavUser } from "./nav-user"
-import { TeamSwitcher } from "./team-switcher"
+import { NavMain } from "./nav-main";
+import { NavProjects } from "./nav-projects";
+import { NavUser } from "./nav-user";
+import { TeamSwitcher } from "./team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 // This is sample data.
 const data = {
@@ -38,12 +38,13 @@ const data = {
       name: "Leave Management System",
       logo: GalleryVerticalEnd,
       plan: "",
-    }],
+    },
+  ],
   navMain: [
     {
-      title: "User",
-      url: "#",
-      icon: SquareTerminal,
+      title: "User Management",
+      url: "/user",
+      icon: Bot,
       isActive: true,
       items: [
         {
@@ -62,8 +63,8 @@ const data = {
     },
     {
       title: "Department",
-      url: "#",
-      icon: Bot,
+      url: "/department",
+      icon: SquareTerminal,
       items: [
         {
           title: "Genesis",
@@ -79,7 +80,6 @@ const data = {
         },
       ],
     },
-    
   ],
   projects: [
     {
@@ -98,21 +98,23 @@ const data = {
       icon: Map,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <SidebarFooter>
+          <NavUser user={data.user} />
+        </SidebarFooter>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
+      <div className="mb-4">
+        <TeamSwitcher teams={data.teams} />
+      </div>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

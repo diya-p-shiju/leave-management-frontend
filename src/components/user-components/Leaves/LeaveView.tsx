@@ -35,8 +35,9 @@ import {
 } from "@/components/ui/table";
 import newRequest from "@/utils/newRequest";
 import DeleteConfirmation from "../Misc-Pages/DeleteConfirmation";
-import CreateLeave from "./LeaveForm"; // Ensure the path to CreateLeave is correct
+import LeaveForm from "./LeaveForm"; 
 import { useData } from "@/components/context/DataProvider";
+import { useState } from "react";
 
 export type LeaveRequest = {
   _id: string;
@@ -60,12 +61,25 @@ export type LeaveRequest = {
   };
 };
 
+type User = {
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+  department: number;
+};
+
 const LeaveView = () => {
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [modalMode, setModalMode] = React.useState<"create" | "update">("create");
   const [leaveToEdit, setLeaveToEdit] = React.useState<LeaveRequest | null>(null);
   const [leaveToDelete, setLeaveToDelete] = React.useState<string | null>(null);
+
+  const [showForm, setshowForm] = useState<boolean>(false);
+  const [formMode, setFormMode] = useState<"create" | "update">("create");
+  const [selectedUser, setSelectedUser] = useState<Partial<User> | null>(null);
 
   const userId = localStorage.getItem("_id");
   const userRole = localStorage.getItem("role") || "";
@@ -219,19 +233,22 @@ const LeaveView = () => {
     {
       id: "principalApproval",
       header: "Principal Approval",
-      cell: ({ row }) => (
-        userRole === "principal" && (
+      cell: ({ row }: { row: any }) => (
+        userRole === "principal" ? (
           <Button
             variant="outline"
             onClick={() =>
-              toggleApproval.mutate({ id: row.original._id, role: "principal" })
+              toggleApproval.mutate({
+                id: row.original._id,
+                role: "principal",
+                principalApproval: !row.original.status.principalApproval.approved,
+              })
             }
-            disabled={row.original.status.principalApproval.approved}
           >
-            {row.original.status.principalApproval.approved
-              ? "Approved"
-              : "Pending"}
+            {row.original.status.principalApproval.approved ? "Approved" : "Pending"}
           </Button>
+        ) : (
+          <p>{row.original.status.principalApproval.approved ? "Approved" : "Pending"}</p>
         )
       ),
     },
@@ -310,9 +327,30 @@ const LeaveView = () => {
     },
   });
 
+
+  const handleCloseForm = () => {
+    setshowForm(false);
+    setSelectedUser(null);
+  };
+
+const handleCreate = () => {
+  setFormMode("create");
+  setshowForm(true);
+  setSelectedUser(null);
+}
+
+const handleUpdate = (user: User) => {
+  setFormMode("update");
+  setSelectedUser(user);
+  setshowForm(true);
+}
   return (
     <>
       <div className="flex flex-col gap-2 ">
+        <div className = "flex justify-end mr-10">
+          <Button onClick={handleCreate}>Create new Leave</Button>
+        </div>
+
         <div className="rounded-md border mt-16">
           <Table>
             <TableHeader>
@@ -356,12 +394,23 @@ const LeaveView = () => {
           </Table>
         </div>
       </div>
+
+      {showForm && (
+        <LeaveForm
+          mode={formMode}
+          initialData={formMode === "update" ? selectedUser : undefined}
+          onClose={handleCloseForm}
+        />
+      )}
+
+
+
       <DeleteConfirmation
         isOpen={!!leaveToDelete}
         onClose={() => setLeaveToDelete(null)}
         onConfirm={handleConfirmDelete} departmentName={""}      />
       {isModalOpen && (
-        <CreateLeave
+        <LeaveForm
           mode={modalMode}
           onClose={() => setIsModalOpen(false)}
           {...(modalMode === "update" && leaveToEdit ? { leave: leaveToEdit } : {})}
