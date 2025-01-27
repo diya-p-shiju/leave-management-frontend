@@ -20,13 +20,13 @@ const ProtectedRoute: React.FC<RouteProps> = ({ children, roles }) => {
 
   if(authenticated === "false"){
     console.log("Not authenticated");
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/error" replace />;
 
   }
 
   if(!roles.includes(role)){
     console.log("Role is not correct ");
-    return <Navigate to="/login" replace />
+    return <Navigate to="/error" replace />
 
   }
 

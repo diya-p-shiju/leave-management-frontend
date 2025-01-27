@@ -41,21 +41,21 @@ const App = () => {
           <Route
             path="/user"
             element={
-              <ProtectedRoute roles={["non-teaching-staff", "teaching-staff","hod","principal"]}>
+              <ProtectedRoute roles={["non-teaching-staff", "teaching-staff","hod","principal","director"]}>
                 <User />
               </ProtectedRoute>
             }
           />
 
           {/* Protected Routes for Higher Authority - HOD, DIRECTOR, PRINCIPAL  */}
-          <Route
+          {/* <Route
             path="/high"
             element={
               <ProtectedRoute roles={["hod", "director", "principal"]}>
                 <HigherAuthority />
               </ProtectedRoute>
             }
-          />
+          /> */}
           </Route>
        <Route path="*" element={<Error />} />
         </Routes>
