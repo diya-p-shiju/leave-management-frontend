@@ -68,7 +68,7 @@ const LeaveView = () => {
   const [leaveToDelete, setLeaveToDelete] = React.useState<string | null>(null);
 
   const userId = localStorage.getItem("_id");
-  const userRole = localStorage.getItem("role");
+  const userRole = localStorage.getItem("role") || "";
   const userDepartment = localStorage.getItem("department");
 
   const { data: leaves, isLoading, isError } = useQuery({
@@ -80,8 +80,9 @@ const LeaveView = () => {
 
   const { departments } = useData();
 
-  const getDepartmentName = (departmentId: string) => {
-    const department = departments?.find((dept: { _id: string }) => dept._id === departmentId);
+  const getDepartmentName = (dep: string) => {
+    const department = departments?.find((dept) => dept._id.toString() === dep);
+    return department ? department.name : "Unknown Department";
   };
 
   const toggleApproval = useMutation({
@@ -205,10 +206,10 @@ const LeaveView = () => {
       cell: ({ row }) => {
         const substitute = row.original.substituteSuggestion;
         return substitute ? (
-          <div>
-            <strong>User:</strong> {JSON.stringify(substitute.suggestedUser).name}
+          <div className="p-2">
+            <p className="p-1">User:</p> {JSON.stringify(substitute.suggestedUser).name}
             <br />
-            <strong>Suggestion:</strong> {JSON.stringify(substitute.suggestion)}
+            <>Suggestion:</> {JSON.stringify(substitute.suggestion)}
           </div>
         ) : (
           <em>No suggestion provided</em>
@@ -238,7 +239,7 @@ const LeaveView = () => {
       id: "hodApproval",
       header: "HOD Approval",
       cell: ({ row }) => (
-        userRole === "hod" && (
+        userRole === "hod" ? (
           <Button
             variant="outline"
             onClick={() =>
@@ -248,6 +249,8 @@ const LeaveView = () => {
           >
             {row.original.status.hodApproval.approved ? "Approved" : "Pending"}
           </Button>
+        ) : (
+          <p>{row.original.status.hodApproval.approved ? "Approved" : "Pending"}</p>
         )
       ),
     },
@@ -309,16 +312,8 @@ const LeaveView = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center py-4">
-          <Input
-            placeholder="Search leaves..."
-            value={String(table.getColumn("applicant.name")?.getFilterValue() || "")}
-            onChange={(event) => table.getColumn("applicant.name")?.setFilterValue(event.target.value)}
-            className="max-w-sm"
-          />
-        </div>
-        <div className="rounded-md border">
+      <div className="flex flex-col gap-2 ">
+        <div className="rounded-md border mt-16">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
