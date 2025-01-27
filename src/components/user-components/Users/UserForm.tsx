@@ -26,10 +26,10 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
     email: initialData?.email || "",
     role: initialData?.role || "",
     department: initialData?.department || "",
-    password: initialData?.password || "", // Add password field here
+    password: initialData?.password || "", 
   });
 
-  const [errors, setErrors] = useState<any>({}); // State to track error messages
+  const [errors, setErrors] = useState<any>({}); 
 
   useEffect(() => {
     if (mode === "update" && initialData) {
@@ -38,7 +38,7 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
         email: initialData.email || "",
         role: initialData.role || "",
         department: initialData.department || "",
-        password: "", // Do not prefill the password for update
+        password: "",
       });
     }
   }, [mode, initialData]);
@@ -46,11 +46,11 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
   // Mutation for creating a user
   const createMutation = useMutation({
     mutationFn: (data: typeof formData) => {
-      return newRequest.post("/user", data); // Create user API call
+      return newRequest.post("/user", data);
     },
     onSuccess: () => {
       console.log("User created successfully!");
-      refetchUsers();  // Refetch the users list
+      refetchUsers(); 
       onClose();
     },
     onError: (error) => {
@@ -65,7 +65,7 @@ const UserForm: React.FC<UserFormProps> = ({ mode, initialData, onClose }) => {
     },
     onSuccess: () => {
       console.log("User updated successfully!");
-      refetchUsers();  // Refetch the users list
+      refetchUsers(); 
       onClose();
     },
     onError: (error) => {

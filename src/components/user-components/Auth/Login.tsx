@@ -27,8 +27,9 @@ const LoginForm: React.FC = () => {
     setLoading(true);
     try {
       const success = await newRequest.post("/auth/login", { email, password });
-      const { name, role, _id } = success.data.user;
+      const { name, role, _id, department } = success.data.user;
       localStorage.setItem("user", JSON.stringify(name));
+      localStorage.setItem("department",department);
       localStorage.setItem("role", role);
       localStorage.setItem("_id", _id);
       localStorage.setItem("authenticated", "true");
