@@ -3,9 +3,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@mui/joy";
 import { Sheet, Table } from "@mui/joy";
 import newRequest from "@/utils/newRequest";
-import DeleteConfirmation from "../Misc-Pages/DeleteConfirmation";  // Ensure this is a valid component
+import DeleteConfirmation from "../Misc-Pages/DeleteConfirmation";
 import { useData } from "@/components/context/DataProvider";
-import LeaveForm from "./LeaveForm";  // Ensure this is a valid component
+import LeaveForm from "./LeaveForm";
 
 export type LeaveRequest = {
   _id: string;
@@ -42,7 +42,7 @@ const LeaveView = () => {
 
   const userRole = localStorage.getItem("role");
   const userEmail = localStorage.getItem("email");
-  const userId = localStorage.getItem("userId");  // Added userId from localStorage
+  const userId = localStorage.getItem("userId");
 
   const fetchLeaves = async () => {
     if (userRole === "teaching-staff" || userRole === "non-teaching-staff") {
@@ -121,119 +121,102 @@ const LeaveView = () => {
   if (isError || !leaves?.data) return <p>Failed to load leave data.</p>;
 
   return (
-    <div className="my-20">
-      <Button variant="solid" color="primary" onClick={() => setIsCreateModalOpen(true)}>
-        Create Leave
-      </Button>
-      <Sheet>
-        <Table>
-          <caption>Leave Requests</caption>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Department</th>
-              <th>From Date</th>
-              <th>To Date</th>
-              <th>Reason</th>
-              <th>Days</th>
-              <th>Substitute</th>
-              <th>HOD Approval</th>
-              <th>Principal Approval</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaves.data.map((leave: LeaveRequest) => (
-              <tr key={leave._id}>
-                <td>{leave.applicant.name}</td>
-                <td>{leave.applicant.email}</td>
-                <td>{leave.applicant.role}</td>
-                <td>{getDepartmentName(leave.applicant.department)}</td>
-                <td>{new Date(leave.fromDate).toLocaleDateString()}</td>
-                <td>{new Date(leave.toDate).toLocaleDateString()}</td>
-                <td>{leave.reason}</td>
-                <td>{leave.actualLeaveDays}</td>
-                <td>{leave.substituteSuggestion?.suggestedUser ? JSON.stringify(leave.substituteSuggestion.suggestedUser.name) : "None"}</td>
-                <td>
-                  <Button
-                    variant="solid"
-                    color={leave.status.hodApproval.approved ? "success" : "warning"}
-                    onClick={() =>
-                      handleToggleApproval(leave._id, "hod", leave.status.hodApproval.approved)
-                    }
-                    disabled={userRole !== "hod"}
-                  >
-                    {leave.status.hodApproval.approved ? "Approved" : "Pending"}
-                  </Button>
-                </td>
-                <td>
-                  <Button
-                    variant="solid"
-                    color={leave.status.principalApproval.approved ? "success" : "warning"}
-                    onClick={() =>
-                      handleToggleApproval(leave._id, "principal", leave.status.principalApproval.approved)
-                    }
-                    disabled={userRole !== "principal"}
-                  >
-                    {leave.status.principalApproval.approved ? "Approved" : "Pending"}
-                  </Button>
-                </td>
-                <td>
-                  {/* Update Button */}
-                  {(userId === leave.applicant.id || userRole === "principal") && (
-                    <Button
-                      variant="solid"
-                      color="info"
-                      onClick={() => handleUpdateLeave(leave)}
-                    >
-                      Update
-                    </Button>
-                  )}
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-purple-700 text-white">
+        <nav className="p-4">
+          <h1 className="text-lg font-bold mb-6">Dashboard</h1>
+          <ul className="space-y-4">
+            <li className="hover:bg-purple-600 rounded p-2 cursor-pointer">
+              Leave Requests
+            </li>
+            {/* You can add more sidebar items here */}
+          </ul>
+        </nav>
+      </aside>
 
-                  {/* Delete Button */}
-                  {(userId === leave.applicant.id || userRole === "principal") && (
-                    <Button
-                      variant="solid"
-                      color="danger"
-                      onClick={() => handleDelete(leave._id)}
-                      disabled={isDeleting}
-                    >
-                      {isDeleting && leaveToDelete === leave._id ? "Deleting..." : "Delete"}
-                    </Button>
-                  )}
-                </td>
+      {/* Main Content */}
+      <main className="flex-1 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-xl font-bold">Leave Requests</h1>
+          <button className="bg-purple-600 text-white px-4 py-2 rounded" onClick={() => setIsCreateModalOpen(true)}>
+            + New Leave Request
+          </button>
+        </div>
+
+        {/* Table */}
+        <div className="bg-white bg-opacity-40 rounded shadow overflow-hidden">
+          <Table>
+            <caption>Leave Requests</caption>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Department</th>
+                <th>From Date</th>
+                <th>To Date</th>
+                <th>Reason</th>
+                <th>Days</th>
+                <th>Substitute</th>
+                <th>HOD Approval</th>
+                <th>Principal Approval</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Sheet>
-      {/* Modal to confirm deletion */}
-      {isModalOpen && (
-        <DeleteConfirmation
-          open={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onConfirm={handleConfirmDelete}
-        />
-      )}
+            </thead>
+            <tbody>
+              {leaves.data.map((leave: LeaveRequest) => (
+                <tr key={leave._id}>
+                  <td>{leave.applicant.name}</td>
+                  <td className="max-w-xs break-words">{leave.applicant.email}</td>
+                  <td>{leave.applicant.role}</td>
+                  <td>{getDepartmentName(leave.applicant.department)}</td>
+                  <td>{new Date(leave.fromDate).toLocaleDateString()}</td>
+                  <td>{new Date(leave.toDate).toLocaleDateString()}</td>
+                  <td>{leave.reason}</td>
+                  <td>{leave.actualLeaveDays}</td>
+                  <td>{leave.substituteSuggestion?.suggestedUser ? JSON.stringify(leave.substituteSuggestion.suggestedUser.name) : "None"}</td>
+                  <td>
+                    <Button
+                      variant="solid"
+                      color={leave.status.hodApproval.approved ? "success" : "warning"}
+                      onClick={() => handleToggleApproval(leave._id, "hod", leave.status.hodApproval.approved)}
+                      disabled={userRole !== "hod"}
+                    >
+                      {leave.status.hodApproval.approved ? "Approved" : "Pending"}
+                    </Button>
+                  </td>
+                  <td>
+                    <Button
+                      variant="solid"
+                      color={leave.status.principalApproval.approved ? "success" : "warning"}
+                      onClick={() => handleToggleApproval(leave._id, "principal", leave.status.principalApproval.approved)}
+                      disabled={userRole !== "principal"}
+                    >
+                      {leave.status.principalApproval.approved ? "Approved" : "Pending"}
+                    </Button>
+                  </td>
+                  <td>
+                    {/* Update Button */}
+                    {(userId === leave.applicant.id || userRole === "principal") && (
+                      <Button variant="solid" color="info" onClick={() => handleUpdateLeave(leave)}>
+                        Update
+                      </Button>
+                    )}
 
-      {/* Modal to create a leave request */}
-      {isCreateModalOpen && (
-        <LeaveForm
-          open={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-        />
-      )}
-
-      {/* Modal to update a leave request */}
-      {isUpdateModalOpen && leaveToUpdate && (
-        <LeaveForm
-          open={isUpdateModalOpen}
-          onClose={() => setIsUpdateModalOpen(false)}
-          leave={leaveToUpdate}
-        />
-      )}
+                    {/* Delete Button */}
+                    {(userId === leave.applicant.id || userRole === "principal") && (
+                      <Button variant="solid" color="danger" onClick={() => handleDelete(leave._id)} disabled={isDeleting}>
+                        {isDeleting && leaveToDelete === leave._id ? "Deleting..." : "Delete"}
+                      </Button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+      </main>
     </div>
   );
 };
