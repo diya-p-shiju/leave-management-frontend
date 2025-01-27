@@ -88,11 +88,13 @@ const GetUsers = () => {
 
   return (
     <div className="my-20">
-      <div className="flex justify-end">
+      <div className="flex justify-between">
         <Button className="mb-4" onClick={handleCreate}>
           Create New User
         </Button>
-       
+        <Button className="border-2 border-green-500 hover:bg-green-500 hover:border-green-500 hover" variant="outline">
+          Logout
+        </Button>
       </div>
       <Sheet
         variant="solid"

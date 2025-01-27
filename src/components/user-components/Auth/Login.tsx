@@ -34,7 +34,7 @@ const LoginForm: React.FC = () => {
       localStorage.setItem("_id", _id);
       localStorage.setItem("authenticated", "true");
       console.log("Login successful");
-      navigate("/admin");
+      navigate("/navigate");
     } catch (error) {
       if (error instanceof AxiosError) {
         setError(error.response?.data?.message || "Invalid credentials");

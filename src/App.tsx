@@ -7,6 +7,7 @@ import HomePage from "./pages/HomePage";
 import Layout from "./pages/Layout";
 import GetUserById from "./components/user-components/Users/GetUserById";
 import Error from "./components/user-components/Misc-Pages/Error"
+import NavigatePage from "./components/user-components/Auth/NavigatePage";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />} >
+          <Route path="/navigate" element={<NavigatePage />} />
           <Route index element={<HomePage />} />
 
           {/* Protected Routes for Admin Page  */}
