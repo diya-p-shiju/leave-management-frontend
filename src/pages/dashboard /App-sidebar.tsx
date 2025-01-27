@@ -26,6 +26,9 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
+
+
+
 // This is sample data.
 const data = {
   user: {
@@ -104,9 +107,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <SidebarFooter>
           <NavUser user={data.user} />
-        </SidebarFooter>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

@@ -44,7 +44,7 @@ const Page: React.FC<Props> = ({ children }) => {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
+                  <BreadcrumbLink>
                     Leave Management System
                   </BreadcrumbLink>
                 </BreadcrumbItem>

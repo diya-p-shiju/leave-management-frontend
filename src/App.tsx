@@ -9,6 +9,7 @@ import Error from "./components/user-components/Misc-Pages/Error"
 import NavigatePage from "./components/user-components/Auth/NavigatePage";
 import UserView from "./components/user-components/Users/UserView";
 import DepartmentView from "./components/user-components/Departments/DepartmentView";
+import Logout from "./components/user-components/Auth/Logout";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />} >
+          <Route path="/logout" element={<Logout />} ></Route>
           <Route path="/navigate" element={<NavigatePage />} />
           <Route index element={<HomePage />} />
 

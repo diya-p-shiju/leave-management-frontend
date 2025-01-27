@@ -1,24 +1,23 @@
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../../ui/button';
+import { useEffect } from 'react';
 
 const LogoutButton = () => {
   const navigate = useNavigate(); 
 
-  const handleLogout = () => {
+  useEffect(() => {
     // Clear the localStorage values
-    localStorage.setItem("user", null);
-    localStorage.setItem("role", null);
-    localStorage.setItem("_id", null);
+    localStorage.setItem("user", "");
+    localStorage.setItem("role", "");
+    localStorage.setItem("_id", "");
     localStorage.setItem("authenticated", "false");
 
     // Redirect to login page
     navigate("/"); 
-  };
+  }, [navigate]);
 
   return (
-    <Button onClick={handleLogout} className="bg-red-500 text-white">
-      Logout
-    </Button>
+    <>
+    </>
   );
 };
 
