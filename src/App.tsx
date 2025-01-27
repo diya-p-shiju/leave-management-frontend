@@ -7,6 +7,7 @@ import Layout from "./pages/Layout";
 import GetUserById from "./components/user-components/Users/GetUserById";
 import Error from "./components/user-components/Misc-Pages/Error"
 import NavigatePage from "./components/user-components/Auth/NavigatePage";
+import UserView from "./components/user-components/Users/UserView";
 
 const App = () => {
   return (
@@ -22,7 +23,7 @@ const App = () => {
             path="/admin"
             element={
               <ProtectedRoute roles={["admin"]}>
-                <Admin />
+                <Admin children={<UserView />} />
               </ProtectedRoute>
             }
           />
@@ -41,7 +42,7 @@ const App = () => {
             path="/user"
             element={
               <ProtectedRoute roles={["non-teaching-staff", "teaching-staff","hod","principal","director"]}>
-                <User />
+                <Admin children={<User />}/>
               </ProtectedRoute>
             }
           />

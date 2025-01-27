@@ -5,7 +5,7 @@ import { Sheet, Table } from "@mui/joy";
 import newRequest from "@/utils/newRequest";
 import DeleteConfirmation from "../Misc-Pages/DeleteConfirmation";
 import { useData } from "@/components/context/DataProvider";
-import LeaveForm from "./LeaveForm";
+
 
 export type LeaveRequest = {
   _id: string;
@@ -34,47 +34,37 @@ const LeaveView = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [leaveToDelete, setLeaveToDelete] = useState<string | null>(null);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [leaveToUpdate, setLeaveToUpdate] = useState<LeaveRequest | null>(null);
-
-  const { departments } = useData();
-
-  const userRole = localStorage.getItem("role");
-  const userEmail = localStorage.getItem("email");
-  const userId = localStorage.getItem("userId");
-
-  const fetchLeaves = async () => {
-    if (userRole === "teaching-staff" || userRole === "non-teaching-staff") {
-      return await newRequest.get(`/leave/${userId}`);
-    } else if (userRole === "hod") {
-      const userDepartment = departments?.find((dept) => dept.id === userId);
-      return await newRequest.get("/leave/", { params: { department: userDepartment?.id } });
-    } else if (userRole === "principal" || userRole === "director") {
-      return await newRequest.get("/leave/");
-    }
-  };
-
-  const getDepartmentName = (departmentId: string) => {
-    const department = departments.find((dept) => dept._id === departmentId);
-    return department ? department.name : "Unknown Name";
-  };
 
   const { data: leaves, isLoading, isError } = useQuery({
-    queryKey: ["leaves", userRole, userEmail],
-    queryFn: fetchLeaves,
-    staleTime: 5 * 60 * 1000,
+    queryKey: ["leaves"],
+    queryFn: async () => {
+      const response = await newRequest.get("/leave/");
+      return response.data;
+    },
   });
 
+  const { departments } = useData(); // Use the useData hook to get departments
+
+  const getDepartmentName = (departmentId: string) => {
+    const department = departments?.find((dept) => dept.id === departmentId);
+    return department ? department.name : "Unknown Department";
+  };
+
   const toggleApproval = useMutation({
-    mutationFn: async ({ id, role, approve }: { id: string; role: "hod" | "principal"; approve: boolean }) => {
+    mutationFn: async ({
+      id,
+      role,
+    }: {
+      id: string;
+      role: "hod" | "principal";
+    }) => {
       const statusField = role === "hod" ? "hodApproval" : "principalApproval";
       return newRequest.put(`/leave/${id}`, {
-        [`status.${statusField}.approved`]: approve,
+        [`status.${statusField}.approved`]: true,
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leaves", userRole, userEmail] });
+      queryClient.invalidateQueries({ queryKey: ["leaves"] });
     },
   });
 
@@ -83,7 +73,7 @@ const LeaveView = () => {
       await newRequest.delete(`/leave/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leaves", userRole, userEmail] });
+      queryClient.invalidateQueries({ queryKey: ["leaves"] });
     },
   });
 
@@ -108,115 +98,126 @@ const LeaveView = () => {
     }
   };
 
-  const handleUpdateLeave = (leave: LeaveRequest) => {
-    setLeaveToUpdate(leave);
-    setIsUpdateModalOpen(true);
-  };
-
-  const handleToggleApproval = (id: string, role: "hod" | "principal", currentStatus: boolean) => {
-    toggleApproval.mutate({ id, role, approve: !currentStatus });
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setLeaveToDelete(null);
   };
 
   if (isLoading) return <p>Loading...</p>;
-  if (isError || !leaves?.data) return <p>Failed to load leave data.</p>;
+  if (isError || !leaves) return <p>Failed to load leave data.</p>;
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-purple-700 text-white">
-        <nav className="p-4">
-          <h1 className="text-lg font-bold mb-6">Dashboard</h1>
-          <ul className="space-y-4">
-            <li className="hover:bg-purple-600 rounded p-2 cursor-pointer">
-              Leave Requests
-            </li>
-            {/* You can add more sidebar items here */}
-          </ul>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-xl font-bold">Leave Requests</h1>
-          <button className="bg-purple-600 text-white px-4 py-2 rounded" onClick={() => setIsCreateModalOpen(true)}>
-            + New Leave Request
-          </button>
-        </div>
-
-        {/* Table */}
-        <div className="bg-white bg-opacity-40 rounded shadow overflow-hidden">
-          <Table>
-            <caption>Leave Requests</caption>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Department</th>
-                <th>From Date</th>
-                <th>To Date</th>
-                <th>Reason</th>
-                <th>Days</th>
-                <th>Substitute</th>
-                <th>HOD Approval</th>
-                <th>Principal Approval</th>
-                <th>Actions</th>
+    <div className="my-20">
+      <Sheet
+        variant="outline"
+        color="neutral"
+        invertedColors
+        sx={(theme) => ({
+          pt: 1,
+          borderRadius: "sm",
+          transition: "0.3s",
+          background: `${theme.vars.palette.secondary}`,
+          "& tr:last-child": {
+            "& td:first-child": {
+              borderBottomLeftRadius: "8px",
+            },
+            "& td:last-child": {
+              borderBottomRightRadius: "8px",
+            },
+          },
+        })}
+      >
+        <Table stripe="odd" hoverRow>
+          <caption>Leave Requests</caption>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Department</th>
+              <th>From Date</th>
+              <th>To Date</th>
+              <th>Reason</th>
+              <th>Days</th>
+              <th>Substitute</th>
+              <th>HOD Approval</th>
+              <th>Principal Approval</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leaves.map((leave: LeaveRequest) => (
+              <tr key={leave._id}>
+                <td>{leave.applicant.name}</td>
+                <td>{leave.applicant.email}</td>
+                <td>{leave.applicant.role}</td>
+                <td>{getDepartmentName(leave.applicant.department)}</td>
+                <td>{new Date(leave.fromDate).toLocaleDateString()}</td>
+                <td>{new Date(leave.toDate).toLocaleDateString()}</td>
+                <td>{leave.reason}</td>
+                <td>{leave.actualLeaveDays}</td>
+                <td>
+                  {JSON.stringify(leave.substituteSuggestion) ? (
+                    <div>
+                      <strong>User:</strong> {JSON.stringify(leave.substituteSuggestion.suggestedUser).name}
+                      <br />
+                      <strong>Suggestion:</strong> {JSON.stringify(leave.substituteSuggestion.suggestion)}
+                    </div>
+                  ) : (
+                    <em>No suggestion provided</em>
+                  )}
+                </td>
+                <td>
+                  <Button
+                    variant="solid"
+                    color={leave.status.hodApproval.approved ? "success" : "warning"}
+                    onClick={() =>
+                      toggleApproval.mutate({ id: leave._id, role: "hod" })
+                    }
+                    disabled={leave.status.hodApproval.approved}
+                  >
+                    {leave.status.hodApproval.approved ? "Approved" : "Pending"}
+                  </Button>
+                </td>
+                <td>
+                  <Button
+                    variant="solid"
+                    color={leave.status.principalApproval.approved ? "success" : "warning"}
+                    onClick={() =>
+                      toggleApproval.mutate({ id: leave._id, role: "principal" })
+                    }
+                    disabled={leave.status.principalApproval.approved}
+                  >
+                    {leave.status.principalApproval.approved ? "Approved" : "Pending"}
+                  </Button>
+                </td>
+                <td>
+                  <Button
+                    variant="solid"
+                    color="danger"
+                    onClick={() => handleDelete(leave._id)}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting && leaveToDelete === leave._id ? "Deleting..." : "Delete"}
+                  </Button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {leaves.data.map((leave: LeaveRequest) => (
-                <tr key={leave._id}>
-                  <td>{leave.applicant.name}</td>
-                  <td className="max-w-xs break-words">{leave.applicant.email}</td>
-                  <td>{leave.applicant.role}</td>
-                  <td>{getDepartmentName(leave.applicant.department)}</td>
-                  <td>{new Date(leave.fromDate).toLocaleDateString()}</td>
-                  <td>{new Date(leave.toDate).toLocaleDateString()}</td>
-                  <td>{leave.reason}</td>
-                  <td>{leave.actualLeaveDays}</td>
-                  <td>{leave.substituteSuggestion?.suggestedUser ? JSON.stringify(leave.substituteSuggestion.suggestedUser.name) : "None"}</td>
-                  <td>
-                    <Button
-                      variant="solid"
-                      color={leave.status.hodApproval.approved ? "success" : "warning"}
-                      onClick={() => handleToggleApproval(leave._id, "hod", leave.status.hodApproval.approved)}
-                      disabled={userRole !== "hod"}
-                    >
-                      {leave.status.hodApproval.approved ? "Approved" : "Pending"}
-                    </Button>
-                  </td>
-                  <td>
-                    <Button
-                      variant="solid"
-                      color={leave.status.principalApproval.approved ? "success" : "warning"}
-                      onClick={() => handleToggleApproval(leave._id, "principal", leave.status.principalApproval.approved)}
-                      disabled={userRole !== "principal"}
-                    >
-                      {leave.status.principalApproval.approved ? "Approved" : "Pending"}
-                    </Button>
-                  </td>
-                  <td>
-                    {/* Update Button */}
-                    {(userId === leave.applicant.id || userRole === "principal") && (
-                      <Button variant="solid" color="info" onClick={() => handleUpdateLeave(leave)}>
-                        Update
-                      </Button>
-                    )}
+            ))}
+          </tbody>
+        </Table>
+      </Sheet>
 
-                    {/* Delete Button */}
-                    {(userId === leave.applicant.id || userRole === "principal") && (
-                      <Button variant="solid" color="danger" onClick={() => handleDelete(leave._id)} disabled={isDeleting}>
-                        {isDeleting && leaveToDelete === leave._id ? "Deleting..." : "Delete"}
-                      </Button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-      </main>
+      {/* Confirmation Modal */}
+      <DeleteConfirmation
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+        departmentName={
+          leaveToDelete
+            ? leaves.find((leave) => leave._id === leaveToDelete)?.applicant.name || ""
+            : ""
+        }
+      />
     </div>
   );
 };
