@@ -6,7 +6,6 @@ import UserForm from "./UserForm";
 import newRequest from "@/utils/newRequest";
 import DeleteConfirmation from "../Misc-Pages/DeleteConfirmation";
 
-
 type User = {
   _id: string;
   name: string;
@@ -19,7 +18,6 @@ type User = {
 const GetUsers = () => {
   const { users, departments, isLoading, error, refetchUsers, refetchDepartments } = useData();
 
-  // State to control the UserForm visibility and mode
   const [showForm, setShowForm] = useState(false);
   const [formMode, setFormMode] = useState<"create" | "update">("create");
   const [selectedUser, setSelectedUser] = useState<Partial<User> | null>(null);
@@ -40,16 +38,15 @@ const GetUsers = () => {
     return department ? department.name : "Unknown Name";
   };
 
-  // Handlers for showing and hiding the form
   const handleCreate = () => {
     setFormMode("create");
-    setSelectedUser(null); 
+    setSelectedUser(null);
     setShowForm(true);
   };
 
   const handleUpdate = (user: User) => {
     setFormMode("update");
-    setSelectedUser(user); 
+    setSelectedUser(user);
     setShowForm(true);
   };
 
@@ -59,8 +56,8 @@ const GetUsers = () => {
   };
 
   const handleDelete = (id: string) => {
-    setUserToDelete(id); // Store the user ID to be deleted
-    setIsModalOpen(true); // Open the confirmation modal
+    setUserToDelete(id);
+    setIsModalOpen(true);
   };
 
   const handleConfirmDelete = async () => {
@@ -76,14 +73,14 @@ const GetUsers = () => {
       alert("Failed to delete user. Please try again.");
     } finally {
       setIsDeleting(false);
-      setIsModalOpen(false); // Close the modal after confirming deletion
-      setUserToDelete(null); // Clear the user ID
+      setIsModalOpen(false);
+      setUserToDelete(null);
     }
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false); // Close the modal without deleting
-    setUserToDelete(null); // Clear the user ID
+    setIsModalOpen(false);
+    setUserToDelete(null);
   };
 
   return (
@@ -96,6 +93,7 @@ const GetUsers = () => {
           Logout
         </Button>
       </div>
+
       <Sheet
         variant="solid"
         color="primary"
