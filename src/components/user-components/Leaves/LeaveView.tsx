@@ -1,6 +1,5 @@
 "use client";
 import './LeaveView.css'
-
 import * as React from "react";
 import {
   ColumnDef,
@@ -38,12 +37,13 @@ import newRequest from "@/utils/newRequest";
 import DeleteConfirmation from "../Misc-Pages/DeleteConfirmation";
 import LeaveForm from "./LeaveForm"; 
 import { useData } from "@/components/context/DataProvider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LoadingPage from "../Misc-Pages/Loading";
 
 export type LeaveRequest = {
   _id: string;
   applicant: {
+    _id: string; // Ensure applicant has an _id field
     name: string;
     email: string;
     role: string;
@@ -88,12 +88,27 @@ const LeaveView = () => {
   const userDepartment = localStorage.getItem("department");
 
   const { data: leaves, isLoading, isError, refetchLeaves } = useQuery({
-    queryKey:"leavesbyid",                                           // caching needed for leaves and users_id with department name
+    queryKey: ["leaves"],
     queryFn: async () => {
       const response = await newRequest.get(`/leave/`);
       return response.data;
     },
   });
+
+  // Filter leaves based on user role and userId
+  const filteredLeaves = React.useMemo(() => {
+    if (!leaves) return [];
+
+    if (userRole === "teaching-staff" || userRole === "non-teaching-staff") {
+      return leaves.filter((leave: LeaveRequest) => leave.applicant._id === userId);
+    } else if (userRole === "hod") {
+      return leaves.filter((leave: LeaveRequest) => leave.applicant.department === userDepartment);
+    } else if (userRole === "principal" || userRole === "director") {
+      return leaves;
+    } else {
+      return [];
+    }
+  }, [leaves, userRole, userDepartment, userId]);
 
   const { departments } = useData();
 
@@ -116,7 +131,6 @@ const LeaveView = () => {
       });
     },
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ["leaves"] });
       refetchLeaves();
     },
   });
@@ -126,7 +140,6 @@ const LeaveView = () => {
       await newRequest.delete(`/leave/${id}`);
     },
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ["leaves"] });
       refetchLeaves();
     },
   });
@@ -149,19 +162,6 @@ const LeaveView = () => {
       setLeaveToDelete(null);
     }
   };
-
-  const filteredLeaves = React.useMemo(() => {
-    if (userRole === "principal") {
-      return leaves;
-    } else if (userRole === "hod") {
-      return leaves?.filter((leave: LeaveRequest) => leave.applicant.department === userDepartment);
-    } else if (userRole === "director") {
-      return leaves;
-    } else {
-      return leaves?.filter((leave: LeaveRequest) => leave.applicant.name === userId);
-    }
-  }, [leaves, userRole, userDepartment, userId]);
-
 
   const columns: ColumnDef<LeaveRequest>[] = [
     {
@@ -278,39 +278,32 @@ const LeaveView = () => {
     },
     {
       id: "actions",
-      cell: ({ row }) =>
-        (userRole === "director" || row.original.applicant.name === userId) && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="w-8 h-8 p-0">
-                <MoreHorizontal className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {row.original.applicant.name === userId && (
-                <DropdownMenuItem onClick={() => openModal("update", row.original)}>
-                   {row.original.applicant.name} - Update
-                </DropdownMenuItem>
-              )}
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => setLeaveToDelete(row.original._id)}
-                className="text-red-600"
-              >
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ),
+      header: "Actions",
+      cell: ({ row }) => (
+        (userRole === "teaching-staff" || userRole === "non-teaching-staff") &&
+        row.original.applicant._id === userId && (
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => openModal("update", row.original)}
+            >
+              Edit
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => setLeaveToDelete(row.original._id)}
+            >
+              Delete
+            </Button>
+          </div>
+        )
+      ),
     },
   ];
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
@@ -332,27 +325,21 @@ const LeaveView = () => {
     },
   });
 
-
   const handleCloseForm = () => {
     setshowForm(false);
     setSelectedUser(null);
   };
 
-const handleCreate = () => {
-  setFormMode("create");
-  setshowForm(true);
-  setSelectedUser(null);
-}
+  const handleCreate = () => {
+    setFormMode("create");
+    setshowForm(true);
+    setSelectedUser(null);
+  };
 
-const handleUpdate = (user: User) => {
-  setFormMode("update");
-  setSelectedUser(user);
-  setshowForm(true);
-}
   return (
     <>
       <div className="flex flex-col gap-2 ">
-        <div className = "flex justify-end mr-10">
+        <div className="flex justify-end mr-10">
           <Button onClick={handleCreate}>Create new Leave</Button>
         </div>
 
@@ -391,7 +378,7 @@ const handleUpdate = (user: User) => {
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    Please refresh.
+                    No leaves found.
                   </TableCell>
                 </TableRow>
               )}
@@ -408,12 +395,12 @@ const handleUpdate = (user: User) => {
         />
       )}
 
-
-
       <DeleteConfirmation
         isOpen={!!leaveToDelete}
         onClose={() => setLeaveToDelete(null)}
-        onConfirm={handleConfirmDelete} departmentName={""}      />
+        onConfirm={handleConfirmDelete}
+        departmentName={""}
+      />
       {isModalOpen && (
         <LeaveForm
           mode={modalMode}

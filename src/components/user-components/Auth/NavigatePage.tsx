@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 const NavigatePage = () => {
@@ -8,23 +8,25 @@ const NavigatePage = () => {
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setRedirect(true);
-    }, 3000);
+    }, 3000); // Redirect after 3 seconds
     return () => clearTimeout(timer);
   }, []);
 
-  if (!redirect) {
-    return <div>Loading...</div>;
+  if (redirect) {
+    switch (currentUser) {
+      case "admin":
+        return <Navigate to="/admin" replace />;
+      case "hod":
+      case "principal":
+      case "non-teaching-staff":
+      case "teaching-staff":
+        return <Navigate to="/user" replace />;
+      default:
+        return <Navigate to="/login" replace />; // Fallback for unknown roles
+    }
   }
 
-  return (
-    <div>
-      {currentUser === "admin" && <Navigate to="/admin" />}
-      {currentUser === "hod" && <Navigate to="/user" />}
-      {currentUser === "principal" && <Navigate to="/user" />}
-      {currentUser === "non-teaching-staff" && <Navigate to="/user" />}
-      {currentUser === "teaching-staff" && <Navigate to="/user" />}
-    </div>
-  )
-}
+  return <div>Loading...</div>;
+};
 
-export default NavigatePage
+export default NavigatePage;
