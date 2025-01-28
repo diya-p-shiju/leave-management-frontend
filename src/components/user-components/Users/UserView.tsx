@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useData } from "@/components/context/DataProvider";
 import { Button } from "@/components/ui/button";
-import { Sheet, Table } from "@mui/joy";
 import UserForm from "./UserForm";
 import newRequest from "@/utils/newRequest";
 import DeleteConfirmation from "../Misc-Pages/DeleteConfirmation";
@@ -16,7 +15,7 @@ type User = {
 };
 
 const GetUsers = () => {
-  const { users, departments, isLoading, error, refetchUsers, refetchDepartments } = useData();
+  const { users, departments, isLoading, error, refetchUsers } = useData();
 
   const [showForm, setShowForm] = useState(false);
   const [formMode, setFormMode] = useState<"create" | "update">("create");
@@ -50,7 +49,6 @@ const GetUsers = () => {
     setShowForm(true);
   };
 
-
   const handleDelete = (id: string) => {
     setUserToDelete(id);
     setIsModalOpen(true);
@@ -79,44 +77,32 @@ const GetUsers = () => {
     setUserToDelete(null);
   };
 
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setSelectedUser(null);
+  };
+
   return (
-    <div className="my-20">
-      <div className="flex justify-end">
-        <Button className="mb-4" onClick={handleCreate}>
-          Create New User
-        </Button>
+    <main className="table max-h-[600px]">
+      <div className="table__header">
+        <h1 className="font-bold text-xl">Users List</h1>
+        {/* <div className="input-group">
+          <input type="text" placeholder="Search..." />
+        </div> */}
+        <Button onClick={handleCreate}>Create New User</Button>
       </div>
 
-      <Sheet
-        variant="plain"
-        color="neutral"
-        invertedColors
-        sx={(theme) => ({
-          pt: 1,
-          borderRadius: "sm",
-          transition: "0.3s",
-          background: "transparent" ,
-          "& tr:last-child": {
-            "& td:first-child": {
-              borderBottomLeftRadius: "8px",
-            },
-            "& td:last-child": {
-              borderBottomRightRadius: "8px",
-            },
-          },
-        })}
-      >
-        <Table stripe="odd" hoverRow>
-          <caption>Users List</caption>
+      <div className="rounded-md border overflow-x-auto overflow-y-auto max-h-[500px] table_body">
+        <table>
           <thead>
             <tr>
-              <th style={{ width: "15%" }}>User ID</th>
-              <th style={{ width: "20%" }}>Name</th>
-              <th style={{ width: "20%" }}>Email</th>
-              <th style={{ width: "10%" }}>Role</th>
-              <th style={{ width: "15%" }}>Password</th>
-              <th style={{ width: "15%" }}>Department Name</th>
-              <th style={{ width: "10%" }}>Options</th>
+              <th>User ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Password</th>
+              <th>Department</th>
+              <th>Options</th>
             </tr>
           </thead>
           <tbody>
@@ -129,23 +115,20 @@ const GetUsers = () => {
                 <td>{"*".repeat(user.password.length)}</td>
                 <td>{getDepartmentName(user.department)}</td>
                 <td>
-                  <Button className="m-2" onClick={() => handleUpdate(user)}>
-                    Update Item
-                  </Button>
+                  <Button onClick={() => handleUpdate(user)}>Update</Button>
                   <Button
-                    className="m-2"
                     variant="secondary"
                     disabled={isDeleting}
                     onClick={() => handleDelete(user._id)}
                   >
-                    {isDeleting ? "Deleting..." : "Delete Item"}
+                    {isDeleting ? "Deleting..." : "Delete"}
                   </Button>
                 </td>
               </tr>
             ))}
           </tbody>
-        </Table>
-      </Sheet>
+        </table>
+      </div>
 
       {showForm && (
         <UserForm
@@ -155,20 +138,14 @@ const GetUsers = () => {
         />
       )}
 
-      {/* Confirmation Modal */}
       <DeleteConfirmation
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onConfirm={handleConfirmDelete}
-        departmentName={userToDelete ? users.find(user => user._id === userToDelete)?.name || "" : ""}
+        departmentName={userToDelete ? users.find((user) => user._id === userToDelete)?.name || "" : ""}
       />
-    </div>
+    </main>
   );
 };
 
 export default GetUsers;
-
-  const handleCloseForm = () => {
-    setShowForm(false);
-    setSelectedUser(null);
-  };

@@ -56,18 +56,17 @@ const Page: React.FC<Props> = ({ children }) => {
           <div className="min-h-[100vh] flex-1 rounded-xl bg-white md:min-h-32">
             <div className=" h-56 mb-20 bg-white  z-20">
               <div className="flex flex-col p-2">
-                <p className="text-left text-2xl font-normal leading-tight ">Leaves</p>
               </div>
-             <div className="flex  gap-3 mx-4">
-             <div className="min-h-36 rounded-lg ml-2 bg-teal-200 w-1/4 relative"></div>
-              <div className="min-h-36 rounded-lg ml-2 bg-blue-200 w-1/4 relative"></div>
-              <div className="min-h-36 rounded-lg ml-2 bg-purple-200 w-1/4 relative"></div>
-              <div className="min-h-36 rounded-lg ml-2 bg-rose-200 w-1/4 relative"></div>
+             <div className="flex  gap-5 mx-4">
+             <div className="min-h-36 rounded-lg ml-2 bg-teal-200 w-1/4 relative flex justify-center gap-4 items-center"> <h1 className="text-7xl font-bold font-mono">28</h1><span className="text-3xl text-wrap w-10 font-sans mr-16 font-semibold leading-normal">Annual Leaves</span>
+            </div>
+              <div className="min-h-36 rounded-lg ml-2 bg-blue-200 w-1/4 relative flex justify-center gap-4 items-center"> <h1 className="text-7xl font-bold font-mono">14</h1><span className="text-3xl text-wrap w-10 font-sans mr-16 font-semibold leading-normal">Casual Leaves</span></div>
+              <div className="min-h-36 rounded-lg ml-2 bg-purple-200 w-1/4 relative flex justify-center gap-4 items-center"> <h1 className="text-7xl font-bold font-mono">08</h1><span className="text-3xl text-wrap w-10 font-sans mr-16 font-semibold leading-normal">Medical Leaves</span></div>
+              <div className="min-h-36 rounded-lg ml-2 bg-rose-200 w-1/4 relative flex justify-center gap-4 items-center"> <h1 className="text-7xl font-bold font-mono">06</h1><span className="text-3xl text-wrap w-10 font-sans mr-16 font-semibold leading-normal">Paid Leaves</span></div>
              </div>
+             <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min md:m-10">{children}</div>
+             
                </div>
-          </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
-            {children}
           </div>
         </div>
       </SidebarInset>
