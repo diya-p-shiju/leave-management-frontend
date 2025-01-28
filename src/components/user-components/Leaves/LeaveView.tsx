@@ -38,6 +38,8 @@ import DeleteConfirmation from "../Misc-Pages/DeleteConfirmation";
 import LeaveForm from "./LeaveForm"; 
 import { useData } from "@/components/context/DataProvider";
 import { useState } from "react";
+import LoadingPage from "../Misc-Pages/Loading";
+import {Plus} from "lucide-react";
 
 export type LeaveRequest = {
   _id: string;
@@ -347,11 +349,7 @@ const handleUpdate = (user: User) => {
   return (
     <>
       <div className="flex flex-col gap-2 ">
-        <div className = "flex justify-end mr-10">
-          <Button onClick={handleCreate}>Create new Leave</Button>
-        </div>
-
-        <div className="rounded-md border mt-16">
+        <div className="rounded-md border">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

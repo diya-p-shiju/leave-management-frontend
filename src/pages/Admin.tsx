@@ -4,8 +4,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -13,6 +11,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { NavUser } from "./nav-user";
 import { useLocation } from "react-router-dom"; // Import useLocation to get the current route
 
 interface Props {
@@ -44,19 +43,29 @@ const Page: React.FC<Props> = ({ children }) => {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink>
-                    Leave Management System
+                  <BreadcrumbLink className="text-black text-md">
+                   Dashboard
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Leave List</BreadcrumbPage>
-                </BreadcrumbItem>
+               
               </BreadcrumbList>
             </Breadcrumb>
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <div className="min-h-[100vh] flex-1 rounded-xl bg-white md:min-h-32">
+            <div className=" h-56 mb-20 bg-white  z-20">
+              <div className="flex flex-col p-2">
+                <p className="text-left text-2xl font-normal leading-tight ">Leaves</p>
+              </div>
+             <div className="flex  gap-3 mx-4">
+             <div className="min-h-36 rounded-lg ml-2 bg-teal-200 w-1/4 relative"></div>
+              <div className="min-h-36 rounded-lg ml-2 bg-blue-200 w-1/4 relative"></div>
+              <div className="min-h-36 rounded-lg ml-2 bg-purple-200 w-1/4 relative"></div>
+              <div className="min-h-36 rounded-lg ml-2 bg-rose-200 w-1/4 relative"></div>
+             </div>
+               </div>
+          </div>
           <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
             {children}
           </div>

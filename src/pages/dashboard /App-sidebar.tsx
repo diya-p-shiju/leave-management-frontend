@@ -11,7 +11,11 @@ import {
   Map,
   PieChart,
   Settings2,
+  UsersRound,
+  Archive,
+  Target,
   SquareTerminal,
+  Copyright
 } from "lucide-react";
 
 import { NavMain } from "./nav-main";
@@ -24,16 +28,48 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  
 } from "@/components/ui/sidebar";
 
-
+const user = localStorage.getItem("user")?.toString().toUpperCase();
+const role = localStorage.getItem("role")?.toString().toUpperCase();
 
 
 // This is sample data.
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: user,
+    email: role,
+    avatar: GalleryVerticalEnd,
+  },
+  teams: [
+    {
+      name: "Leave Management System",
+      logo: Target,
+      plan: "",
+    },
+  ],
+  navMain: [
+    {
+      title: "User Management",
+      url: "/admin",
+      icon: UsersRound,
+      isActive: true,
+    },
+    {
+      title: "Department",
+      url: "/department",
+      icon: Archive,
+      items: [
+      ],
+    },
+  ],
+};
+
+const dataAdmin = {
+  user: {
+    name: user,
+    email: role,
     avatar: "/avatars/shadcn.jpg",
   },
   teams: [
@@ -45,14 +81,8 @@ const data = {
   ],
   navMain: [
     {
-      title: "User Management",
+      title: "Leaves",
       url: "/user",
-      icon: Bot,
-      isActive: true,
-    },
-    {
-      title: "Department",
-      url: "/department",
       icon: SquareTerminal,
       items: [
       ],
@@ -61,17 +91,26 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const role = localStorage.getItem("role");
+const user = role === "admin" ? data : dataAdmin;
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" {...props} >
       <SidebarHeader>
-          <NavUser user={data.user} />
-      </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
-      </SidebarContent>
       <div className="mb-4">
         <TeamSwitcher teams={data.teams} />
       </div>
+     {/* <NavUser user={user.user} />  */}
+      </SidebarHeader>
+      <SidebarContent>
+        <NavMain items={user.navMain} />
+      </SidebarContent>
+      <SidebarFooter>
+        <div className="flex gap-2 pb-3 justify-start ml-2 ">
+        <Copyright />
+        <p className="text-gray-300">2025</p>
+        <span className="ml-6 text-gray-300">MIT LICENSE</span>
+        </div>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

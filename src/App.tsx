@@ -10,6 +10,8 @@ import NavigatePage from "./components/user-components/Auth/NavigatePage";
 import UserView from "./components/user-components/Users/UserView";
 import DepartmentView from "./components/user-components/Departments/DepartmentView";
 import Logout from "./components/user-components/Auth/Logout";
+import Fake from "./components/user-components/Misc-Pages/Fake";
+
 
 const App = () => {
   return (
@@ -20,6 +22,7 @@ const App = () => {
           <Route path="/logout" element={<Logout />} />
           <Route path="/navigate" element={<NavigatePage />} />
           <Route index element={<HomePage />} />
+          {/* <Route path="/fake" element={<Fake />} /> */}
 
           {/* Protected Routes for Admin Page  */}
           <Route

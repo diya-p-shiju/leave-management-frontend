@@ -1,6 +1,7 @@
 "use client"
 
-import { ChevronRight, type LucideIcon } from "lucide-react"
+import { UsersRound, type LucideIcon } from "lucide-react"
+
 
 import {
   Collapsible,
@@ -47,7 +48,7 @@ export function NavMain({
             className="group/collapsible"
           >
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip={item.title} onClick={() => navigate(item.url)}>
+              <SidebarMenuButton tooltip={item.title} onClick={() => navigate(item.url)} className="text-md py-6 hover:bg-blue-200 hover:rounded-sm  hover:text-black">
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>
               </SidebarMenuButton>
