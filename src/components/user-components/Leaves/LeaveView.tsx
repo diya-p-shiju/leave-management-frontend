@@ -87,9 +87,10 @@ const LeaveView = () => {
   const userRole = localStorage.getItem("role") || "";
   const userDepartment = localStorage.getItem("department");
 
-  const { data: leaves, isLoading, isError } = useQuery({
+  const { data: leaves, isLoading, isError, refetchLeaves } = useQuery({
+    queryKey:"leavesbyid",                                           // caching needed for leaves and users_id with department name
     queryFn: async () => {
-      const response = await newRequest.get("/leave/");
+      const response = await newRequest.get(`/leave/`);
       return response.data;
     },
   });
@@ -115,7 +116,8 @@ const LeaveView = () => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leaves"] });
+      // queryClient.invalidateQueries({ queryKey: ["leaves"] });
+      refetchLeaves();
     },
   });
 
@@ -124,7 +126,8 @@ const LeaveView = () => {
       await newRequest.delete(`/leave/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leaves"] });
+      // queryClient.invalidateQueries({ queryKey: ["leaves"] });
+      refetchLeaves();
     },
   });
 
@@ -355,7 +358,7 @@ const handleUpdate = (user: User) => {
 
         <div className="rounded-md border overflow-x-auto overflow-y-auto max-h-[500px]">
           <Table>
-            <TableHeader>
+            <TableHeader id='tableHeader'>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
@@ -388,7 +391,7 @@ const handleUpdate = (user: User) => {
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    Please refresh.
                   </TableCell>
                 </TableRow>
               )}

@@ -136,6 +136,8 @@ thead th {
     left: 0;
     background-color: #d5d1defe;
     cursor: pointer;
+    padding: 5px;
+    margin: 1px;
     text-transform: capitalize;
 }
 

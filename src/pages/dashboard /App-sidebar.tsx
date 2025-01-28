@@ -2,20 +2,13 @@
 
 import * as React from "react";
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
   GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
   UsersRound,
   Archive,
   Target,
   SquareTerminal,
-  Copyright
+  Copyright,
+  PersonStanding
 } from "lucide-react";
 
 import { NavMain } from "./nav-main";
@@ -33,6 +26,7 @@ import {
 
 const user = localStorage.getItem("user")?.toString().toUpperCase();
 const role = localStorage.getItem("role")?.toString().toUpperCase();
+const department = localStorage.getItem("department")?.toString().toUpperCase();
 
 
 // This is sample data.
@@ -40,7 +34,8 @@ const data = {
   user: {
     name: user,
     email: role,
-    avatar: GalleryVerticalEnd,
+    avatar: PersonStanding,
+    department : department,
   },
   teams: [
     {
@@ -70,7 +65,7 @@ const dataAdmin = {
   user: {
     name: user,
     email: role,
-    avatar: "/avatars/shadcn.jpg",
+    avatar: PersonStanding,
   },
   teams: [
     {
@@ -99,7 +94,7 @@ const user = role === "admin" ? data : dataAdmin;
       <div className="mb-4">
         <TeamSwitcher teams={data.teams} />
       </div>
-     {/* <NavUser user={user.user} />  */}
+     <NavUser user={user.user} /> 
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={user.navMain} />

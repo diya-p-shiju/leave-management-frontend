@@ -13,7 +13,7 @@ const HomePage = () => {
     navigate("/login");
   }
 
-  const text = "Streamline Your       Employee Leave       Management             System   ";
+  const text = `Streamline Your Employee Leave Management      System   `;
   const textVariants = {
     hidden: { opacity: 0 },
     visible: (i: number) => ({
@@ -32,9 +32,9 @@ const HomePage = () => {
         alt="Employee"
         className="absolute inset-0 w-full h-full object-cover brightness-75 -z-20"
       />
-      <div className="container min-h-[700px] my-32 flex-col justify-center mx-44 overflow-hidden">
-        <div className="h-4/5 w-[1000px] m-20 overflow-hidden">
-          <h1 className="text-white font-bold text-8xl leading-tight text-left">
+      <div className="container md:min-h-[700px] md:my-32 flex-col justify-center md:mx-44 overflow-hidden">
+        <div className="h-4/5 w-[800px] m-20 overflow-hidden ">
+          <h1 className="text-white font-bold text-8xl leading-tight text-left text-wrap">
             {text.split("").map((char, index) => (
               <m.span
                 key={index}

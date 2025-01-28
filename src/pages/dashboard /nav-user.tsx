@@ -1,23 +1,18 @@
 "use client"
 
 import {
-  BadgeCheck,
-  Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
+  PersonStanding
 } from "lucide-react"
 
 import {
   Avatar,
-  AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -38,6 +33,7 @@ export function NavUser({
     name: string
     email: string
     avatar: string
+    department : string
   }
 }) {
   const { isMobile } = useSidebar()
@@ -53,11 +49,13 @@ export function NavUser({
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                {/* <AvatarFallback className="rounded-lg">CN</AvatarFallback> */}
+                <PersonStanding />
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate text-xs">{user.department}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -72,11 +70,13 @@ export function NavUser({
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  {/* <AvatarFallback className="rounded-lg">CN</AvatarFallback> */}
+                  <PersonStanding />
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <span className="truncate font-semibold"> USER: {user.name}</span>
+                  <span className="truncate text-xs">ROLE : {user.email}</span>
+                  <span className="truncate text-xs">DEPARTMENT : {user.department}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
