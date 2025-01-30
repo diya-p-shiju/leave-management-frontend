@@ -1,9 +1,10 @@
-  import { Button } from "flowbite-react";
+
   import { useState, ChangeEvent, FormEvent } from "react";
   import { motion } from "framer-motion";
   import newRequest from "@/utils/newRequest";
   import { AxiosError } from "axios";
   import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
   const LoginForm: React.FC = () => {
     const [email, setEmail] = useState<string>("");
